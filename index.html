@@ -369,7 +369,7 @@ const WORKOUT = {
         const rpe=(s.rpe!==undefined&&s.rpe!=="")?" RPE"+s.rpe:"";
         parts.push("п"+(i+1)+" "+w+"×"+r+rpe);
       }
-      L.push(ex.logName+": "+parts.join("  "));
+      L.push(ex.code+" "+ex.logName+": "+parts.join("  "));
     });
     L.push("");
     const f=state.footer;
