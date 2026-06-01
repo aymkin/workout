@@ -13,14 +13,14 @@
     --bg:#0d0f14; --card:#171a22; --card2:#1f2330; --line:#2a2f3d;
     --txt:#e8eaf0; --muted:#8b90a0; --accent:#4f8cff; --accent2:#6ad29a;
     --warn:#e0a64a; --done:#6ad29a; --danger:#e0574a;
-    --radius:16px;
+    --radius:14px;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
   html,body{margin:0; background:var(--bg); color:var(--txt);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
     font-size:16px; line-height:1.4}
   body{padding:0 0 96px; max-width:560px; margin:0 auto}
-  header{position:sticky; top:0; z-index:5; background:linear-gradient(180deg,var(--bg) 70%,transparent);
+  header{position:sticky; top:0; z-index:5; background:linear-gradient(180deg,var(--bg) 75%,transparent);
     padding:14px 16px 10px}
   header .title{font-size:20px; font-weight:700; letter-spacing:.2px}
   header .sub{color:var(--muted); font-size:13px; margin-top:2px}
@@ -29,34 +29,34 @@
   .progress>i{display:block; height:100%; width:0; background:var(--accent2); transition:width .3s}
   main{padding:4px 12px}
   .group-name{font-size:12px; font-weight:700; color:var(--accent); letter-spacing:1px;
-    margin:18px 6px 4px; text-transform:uppercase}
-  .group-hint{font-size:12px; color:var(--muted); margin:0 6px 8px}
-  .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
-    padding:14px; margin:8px 0; display:flex; align-items:center; gap:12px; cursor:pointer;
+    margin:18px 6px 2px; text-transform:uppercase}
+  .group-hint{font-size:12px; color:var(--muted); margin:0 6px 6px}
+  .row{background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:12px 14px; margin:6px 0; display:flex; align-items:center; gap:12px; cursor:pointer;
     transition:background .15s, border-color .15s}
-  .card:active{background:var(--card2)}
-  .card.done{border-color:var(--done)}
-  .card.bodyweight{cursor:pointer}
-  .card .body{flex:1; min-width:0}
-  .card .row1{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap}
-  .code{font-weight:800; color:var(--muted); font-size:13px; min-width:26px}
-  .name{font-weight:700; font-size:16px}
-  .badge{font-size:11px; background:var(--card2); color:var(--warn); padding:1px 7px;
+  .row:active{background:var(--card2)}
+  .row.done{border-color:var(--done)}
+  .row .body{flex:1; min-width:0}
+  .row1{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap}
+  .code{font-weight:800; color:var(--muted); font-size:13px}
+  .name{font-weight:700; font-size:15px}
+  .setno{font-size:12px; color:var(--muted); font-weight:600}
+  .badge{font-size:10px; background:var(--card2); color:var(--warn); padding:1px 6px;
     border-radius:20px; border:1px solid var(--line)}
-  .rec{color:var(--muted); font-size:13px; margin-top:4px}
+  .rec{color:var(--muted); font-size:13px; margin-top:3px}
   .rec b{color:var(--txt); font-weight:600}
-  .cue{color:var(--muted); font-size:12px; margin-top:5px; font-style:italic; opacity:.85}
-  .entered{color:var(--accent2); font-size:13px; margin-top:5px; font-variant-numeric:tabular-nums}
-  .check{width:26px; height:26px; border-radius:50%; border:2px solid var(--line);
-    flex:none; display:flex; align-items:center; justify-content:center; font-size:15px; color:transparent}
-  .card.done .check{background:var(--done); border-color:var(--done); color:#0d0f14}
+  .cue{color:var(--muted); font-size:12px; margin-top:4px; font-style:italic; opacity:.85}
+  .entered{color:var(--accent2); font-size:14px; font-weight:600; margin-top:4px; font-variant-numeric:tabular-nums}
+  .check{width:24px; height:24px; border-radius:50%; border:2px solid var(--line);
+    flex:none; display:flex; align-items:center; justify-content:center; font-size:14px; color:transparent}
+  .row.done .check{background:var(--done); border-color:var(--done); color:#0d0f14}
   /* footer card */
   .fcard{background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
-    padding:14px; margin:8px 0}
+    padding:14px; margin:14px 0 6px}
   .fcard h3{margin:0 0 10px; font-size:13px; color:var(--accent); letter-spacing:1px; text-transform:uppercase}
   .field{margin:10px 0}
   .field label{display:block; font-size:13px; color:var(--muted); margin-bottom:4px}
-  .field input,.field textarea{width:100%; background:var(--bg); border:1px solid var(--line);
+  .field input{width:100%; background:var(--bg); border:1px solid var(--line);
     color:var(--txt); border-radius:10px; padding:10px 12px; font-size:16px; font-family:inherit}
   .seg{display:flex; gap:6px}
   .seg button{flex:1; background:var(--bg); border:1px solid var(--line); color:var(--muted);
@@ -76,19 +76,19 @@
   .overlay.open{display:flex}
   .sheet{background:var(--card); width:100%; max-width:560px; border-radius:20px 20px 0 0;
     padding:18px 16px calc(18px + env(safe-area-inset-bottom)); max-height:88vh; overflow:auto;
-    animation:up .22s ease}
+    animation:up .2s ease}
   @keyframes up{from{transform:translateY(40px); opacity:.5}to{transform:none; opacity:1}}
   .sheet h2{margin:0 0 2px; font-size:18px}
   .sheet .sub{color:var(--muted); font-size:13px; margin-bottom:14px}
-  .setrow{display:grid; grid-template-columns:34px 1fr 1fr 1fr; gap:8px; align-items:center; margin:8px 0}
+  .setrow{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; align-items:center; margin:6px 0}
+  .setrow.drop{grid-template-columns:48px 1fr}
   .setrow .lbl{color:var(--muted); font-size:13px; font-weight:700}
   .setrow input{width:100%; background:var(--bg); border:1px solid var(--line); color:var(--txt);
-    border-radius:10px; padding:12px 6px; font-size:16px; text-align:center;
+    border-radius:10px; padding:14px 6px; font-size:18px; text-align:center;
     font-variant-numeric:tabular-nums}
   .setrow input:focus{border-color:var(--accent); outline:none}
-  .heads{display:grid; grid-template-columns:34px 1fr 1fr 1fr; gap:8px; margin-bottom:2px}
+  .heads{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:2px}
   .heads span{font-size:11px; color:var(--muted); text-align:center; text-transform:uppercase; letter-spacing:.5px}
-  .heads span:first-child{text-align:left}
   .sheet-actions{display:flex; gap:10px; margin-top:18px}
   .toast{position:fixed; bottom:90px; left:50%; transform:translateX(-50%); background:var(--accent2);
     color:#0d0f14; font-weight:700; padding:12px 20px; border-radius:30px; z-index:20; opacity:0;
@@ -109,14 +109,14 @@ const WORKOUT = {
   subtitle: "Phase 3 V-Taper · калибровка",
   location: "Amersfoort",
   groups: [
-    { name: "Суперсет 1", hint: "грудь ↔ задняя дельта · чередуй 1A → 1B → 1A …",
+    { name: "Суперсет 1", hint: "грудь ↔ задняя дельта · чередуй 1A → 1B",
       exercises: [
         { code:"1A", name:"Incline DB Press 30°", logName:"Incline DB 30°", weight:"~26", reps:"6–10", rpe:"8–9", sets:3, def:{w:26,r:8,rpe:9},
           cue:"лопатки сведены, первый в сессии — ЦНС свежа" },
         { code:"1B", name:"Reverse Pec Deck", logName:"Reverse Pec Deck", weight:"~28–35", reps:"15", rpe:"8", sets:3, isNew:true, def:{w:30,r:15,rpe:8},
           cue:"новый тренажёр — сфотать сетку; альт: Cable Face Pull rope ~20–25" },
       ]},
-    { name: "Суперсет 2", hint: "широчайшая ↔ средняя дельта · чередуй 2A → 2B → 2A …",
+    { name: "Суперсет 2", hint: "широчайшая ↔ средняя дельта · чередуй 2A → 2B (+ 4-й мах соло)",
       exercises: [
         { code:"2A", name:"Lat Pulldown ПРОНИР.", logName:"Lat Pulldown PRONATED", weight:"~72", reps:"8–12", rpe:"8–9", sets:3, isNew:true, def:{w:72,r:10,rpe:9},
           cue:"пронированный хват (не нейтральный!) — главное изменение для V" },
@@ -130,24 +130,24 @@ const WORKOUT = {
       ]},
     { name: "Финишер",
       exercises: [
-        { code:"F", name:"Lateral Raise drop-set", logName:"Finisher LR drop", weight:"по 8 → 6 → 4", reps:"до отказа", rpe:"9", sets:3, dropset:true, def:{w:8,r:0,rpe:9},
+        { code:"F", name:"Lateral Raise drop-set", logName:"Finisher LR drop", weight:"по 8 → 6 → 4", reps:"до отказа", rpe:"9", sets:3, dropset:true,
           cue:"три дропа подряд без пауз; пиши только вес" },
       ]},
     { name: "Кор",
       exercises: [
-        { code:"C1", name:"Stomach Vacuum", logName:"Stomach Vacuum", weight:"4 × 20с", reps:"", rpe:"", bodyweight:true },
-        { code:"C2", name:"Dead Bug", logName:"Dead Bug", weight:"2 × 10", reps:"", rpe:"", bodyweight:true },
+        { code:"C1", name:"Stomach Vacuum", logName:"Stomach Vacuum", weight:"4 × 20с", bodyweight:true },
+        { code:"C2", name:"Dead Bug", logName:"Dead Bug", weight:"2 × 10", bodyweight:true },
       ]},
   ],
   footer: [
-    { key:"time", label:"Время сессии (мин)", type:"text", placeholder:"напр. 58" },
-    { key:"pump_delts", label:"Памп — дельты", type:"text", placeholder:"да / нет / слабо" },
-    { key:"pump_chest", label:"Памп — грудь", type:"text", placeholder:"да / нет / слабо" },
-    { key:"pump_back",  label:"Памп — спина", type:"text", placeholder:"да / нет / слабо" },
+    { key:"time", label:"Время сессии (мин)", placeholder:"напр. 58" },
+    { key:"pump_delts", label:"Памп — дельты", placeholder:"да / нет / слабо" },
+    { key:"pump_chest", label:"Памп — грудь", placeholder:"да / нет / слабо" },
+    { key:"pump_back",  label:"Памп — спина", placeholder:"да / нет / слабо" },
     { key:"feeling", label:"Ощущение к концу", type:"seg", opts:["дотянул","мог ещё","развалился"] },
-    { key:"sleep", label:"Сон ночь / энергия утром", type:"text", placeholder:"напр. 7ч / свежий" },
-    { key:"grid_pecdeck", label:"Сетка reverse pec deck", type:"text", placeholder:"шаг плиток / диапазон" },
-    { key:"grid_facepull", label:"Сетка face pull (если делал)", type:"text", placeholder:"веса блока" },
+    { key:"sleep", label:"Сон ночь / энергия утром", placeholder:"напр. 7ч / свежий" },
+    { key:"grid_pecdeck", label:"Сетка reverse pec deck", placeholder:"шаг плиток / диапазон" },
+    { key:"grid_facepull", label:"Сетка face pull (если делал)", placeholder:"веса блока" },
   ],
 };
 </script>
@@ -166,11 +166,7 @@ const WORKOUT = {
   <button class="btn primary" id="export">📋 Экспорт</button>
 </div>
 
-<!-- модалка ввода подходов -->
-<div class="overlay" id="overlay">
-  <div class="sheet" id="sheet"></div>
-</div>
-
+<div class="overlay" id="overlay"><div class="sheet" id="sheet"></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -179,8 +175,9 @@ const WORKOUT = {
   const KEY = "workout-" + WORKOUT.id;
   const $ = (s,el=document)=>el.querySelector(s);
   const flat = WORKOUT.groups.flatMap(g=>g.exercises);
+  const totSets = ex => ex.bodyweight ? 1 : (ex.dropset ? 1 : ex.sets);
 
-  // ---- state ----
+  // ---- state: state.sets[code] = массив подходов [{w,r,rpe}], либо true для bodyweight ----
   let state = load();
   function load(){
     try{ return JSON.parse(localStorage.getItem(KEY)) || {sets:{}, footer:{}}; }
@@ -193,125 +190,143 @@ const WORKOUT = {
   $("#h-sub").textContent = WORKOUT.subtitle;
   $("#h-meta").textContent = WORKOUT.date+" · "+WORKOUT.location;
 
-  // ---- render list ----
-  function render(){
-    const main = $("#main");
-    main.innerHTML = "";
+  // ---- порядок строк: внутри группы — по раундам (round-major интерливинг суперсета) ----
+  function buildRows(){
+    const rows=[];
     WORKOUT.groups.forEach(g=>{
-      const gn = document.createElement("div");
-      gn.className="group-name"; gn.textContent=g.name; main.appendChild(gn);
-      if(g.hint){ const h=document.createElement("div"); h.className="group-hint"; h.textContent=g.hint; main.appendChild(h); }
-      g.exercises.forEach(ex=>{
-        main.appendChild(card(ex));
-      });
+      rows.push({grp:g});
+      const maxS = Math.max.apply(null, g.exercises.map(totSets));
+      for(let i=0;i<maxS;i++){
+        g.exercises.forEach(ex=>{ if(i<totSets(ex)) rows.push({ex, i, total:totSets(ex)}); });
+      }
     });
-    // footer card
+    return rows;
+  }
+
+  function setEntry(code,i){ const a=state.sets[code]; return (a && typeof a==="object" && a[i]) ? a[i] : null; }
+  function filled(s){ return s && [s.w,s.r,s.rpe].some(v=> v!==undefined && v!==""); }
+
+  function rowDone(ex,i){
+    if(ex.bodyweight) return state.sets[ex.code]===true;
+    if(ex.dropset){ const a=state.sets[ex.code]; return Array.isArray(a) && a.some(s=> s && s.w!==undefined && s.w!==""); }
+    return filled(setEntry(ex.code,i));
+  }
+
+  function enteredText(ex,i){
+    if(ex.bodyweight) return state.sets[ex.code]===true ? "сделано ✓" : "";
+    if(ex.dropset){
+      const a=state.sets[ex.code]; if(!Array.isArray(a)) return "";
+      return [8,6,4].map((rp,k)=> rp+"("+(a[k]&&a[k].w!==undefined&&a[k].w!==""?a[k].w:"_")+")").join(" → ");
+    }
+    const s=setEntry(ex.code,i); if(!filled(s)) return "";
+    return (s.w!==""&&s.w!==undefined?s.w:"_")+"×"+(s.r!==""&&s.r!==undefined?s.r:"_")
+      +(s.rpe!==""&&s.rpe!==undefined?" · RPE "+s.rpe:"");
+  }
+
+  // ---- render ----
+  function render(){
+    const main=$("#main"); main.innerHTML="";
+    buildRows().forEach(r=>{
+      if(r.grp){
+        const gn=document.createElement("div"); gn.className="group-name"; gn.textContent=r.grp.name; main.appendChild(gn);
+        if(r.grp.hint){ const h=document.createElement("div"); h.className="group-hint"; h.textContent=r.grp.hint; main.appendChild(h); }
+      } else {
+        main.appendChild(rowEl(r.ex, r.i, r.total));
+      }
+    });
     main.appendChild(footerCard());
     updateProgress();
   }
 
-  function card(ex){
-    const c = document.createElement("div");
-    c.className = "card" + (isDone(ex)?" done":"") + (ex.bodyweight?" bodyweight":"");
-    const body = document.createElement("div"); body.className="body";
-    const row1 = document.createElement("div"); row1.className="row1";
-    row1.innerHTML = '<span class="code">'+ex.code+'</span><span class="name">'+ex.name+'</span>'
-      + (ex.isNew?'<span class="badge">⚙️ калибровка</span>':'');
-    body.appendChild(row1);
+  function rowEl(ex,i,total){
+    const c=document.createElement("div");
+    c.className="row"+(rowDone(ex,i)?" done":"");
+    const body=document.createElement("div"); body.className="body";
+    const r1=document.createElement("div"); r1.className="row1";
+    let head='<span class="code">'+ex.code+'</span><span class="name">'+ex.name+'</span>';
+    if(!ex.bodyweight && !ex.dropset && total>1) head+='<span class="setno">подход '+(i+1)+'/'+total+'</span>';
+    if(ex.isNew && i===0) head+='<span class="badge">⚙️ калибровка</span>';
+    r1.innerHTML=head; body.appendChild(r1);
 
-    if(!ex.bodyweight){
-      const rec=document.createElement("div"); rec.className="rec";
-      rec.innerHTML = '<b>'+ex.weight+'</b> · '+ex.sets+'×'+ex.reps+' · RPE '+ex.rpe;
-      body.appendChild(rec);
-    } else {
-      const rec=document.createElement("div"); rec.className="rec";
-      rec.innerHTML='<b>'+ex.weight+'</b>'; body.appendChild(rec);
-    }
-    if(ex.cue){ const q=document.createElement("div"); q.className="cue"; q.textContent=ex.cue; body.appendChild(q); }
+    const rec=document.createElement("div"); rec.className="rec";
+    if(ex.bodyweight) rec.innerHTML='<b>'+ex.weight+'</b>';
+    else if(ex.dropset) rec.innerHTML='<b>'+ex.weight+'</b> · '+ex.reps;
+    else rec.innerHTML='<b>'+ex.weight+'</b> · '+ex.reps+' повт · RPE '+ex.rpe;
+    body.appendChild(rec);
 
-    const entered = enteredText(ex);
-    if(entered){ const e=document.createElement("div"); e.className="entered"; e.textContent=entered; body.appendChild(e); }
+    if(ex.cue && i===0){ const q=document.createElement("div"); q.className="cue"; q.textContent=ex.cue; body.appendChild(q); }
+
+    const et=enteredText(ex,i);
+    if(et){ const e=document.createElement("div"); e.className="entered"; e.textContent=et; body.appendChild(e); }
 
     const chk=document.createElement("div"); chk.className="check"; chk.textContent="✓";
     c.appendChild(body); c.appendChild(chk);
-    c.addEventListener("click", ()=> ex.bodyweight ? toggleBody(ex) : openSheet(ex));
+    c.onclick = ()=> ex.bodyweight ? toggleBody(ex) : (ex.dropset ? openDrop(ex) : openSet(ex,i));
     return c;
   }
 
-  function isDone(ex){
-    if(ex.bodyweight) return !!state.sets[ex.code];
-    const d = state.sets[ex.code];
-    return d && d.some(s=> s && (s.w!=="" || s.r!=="" || s.rpe!==""));
-  }
-  function enteredText(ex){
-    if(ex.bodyweight) return state.sets[ex.code] ? "сделано ✓" : "";
-    const d = state.sets[ex.code]; if(!d) return "";
-    if(ex.dropset){
-      return d.map((s,i)=> [8,6,4][i]+"("+(s&&s.w!==""?s.w:"_")+")").join(" → ");
-    }
-    return d.map((s,i)=> "п"+(i+1)+" "+((s&&s.w!=="")?s.w:"_")+"×"+((s&&s.r!=="")?s.r:"_")
-      +((s&&s.rpe!=="")?" R"+s.rpe:"")).join("  ");
-  }
-
   function toggleBody(ex){
-    state.sets[ex.code] = state.sets[ex.code] ? null : true;
-    if(!state.sets[ex.code]) delete state.sets[ex.code];
+    if(state.sets[ex.code]===true) delete state.sets[ex.code];
+    else state.sets[ex.code]=true;
     save(); render();
   }
 
-  // ---- modal ----
+  // ---- модалка одного подхода ----
   let current=null;
-  function openSheet(ex){
-    current=ex;
-    const sheet=$("#sheet");
-    const existing = state.sets[ex.code] || [];
-    let rows="";
-    const labels = ex.dropset ? ["8","6","4"] : Array.from({length:ex.sets},(_,i)=>"п"+(i+1));
-    if(!ex.dropset){
-      rows += '<div class="heads"><span></span><span>вес</span><span>повт</span><span>RPE</span></div>';
-    } else {
-      rows += '<div class="heads"><span>повт</span><span>вес</span><span></span><span></span></div>';
-    }
-    for(let i=0;i<labels.length;i++){
-      const s = existing[i] || {};
-      const w = s.w!==undefined?s.w:(i===0?(ex.def&&ex.def.w!==undefined?ex.def.w:""):"");
-      const r = s.r!==undefined?s.r:(ex.def&&ex.def.r?ex.def.r:"");
-      const rpe = s.rpe!==undefined?s.rpe:(ex.def&&ex.def.rpe?ex.def.rpe:"");
-      if(ex.dropset){
-        rows += '<div class="setrow"><div class="lbl">'+labels[i]+'</div>'
-          +'<input inputmode="decimal" data-i="'+i+'" data-f="w" value="'+(s.w!==undefined?s.w:"")+'" placeholder="вес">'
-          +'<div></div><div></div></div>';
-      } else {
-        rows += '<div class="setrow"><div class="lbl">'+labels[i]+'</div>'
-          +'<input inputmode="decimal" data-i="'+i+'" data-f="w" value="'+w+'" placeholder="кг">'
-          +'<input inputmode="numeric" data-i="'+i+'" data-f="r" value="'+r+'" placeholder="повт">'
-          +'<input inputmode="decimal" data-i="'+i+'" data-f="rpe" value="'+rpe+'" placeholder="RPE"></div>';
-      }
-    }
-    sheet.innerHTML =
+  function openSet(ex,i){
+    current={ex,i,mode:"set"};
+    const s=setEntry(ex.code,i)||{};
+    const d=ex.def||{};
+    const w  = s.w!==undefined?s.w:(d.w!==undefined?d.w:"");
+    const r  = s.r!==undefined?s.r:(d.r!==undefined?d.r:"");
+    const rpe= s.rpe!==undefined?s.rpe:(d.rpe!==undefined?d.rpe:"");
+    $("#sheet").innerHTML =
       '<h2>'+ex.code+' · '+ex.name+'</h2>'
-      +'<div class="sub">Ориентир: '+ex.weight+(ex.dropset?'':' · RPE '+ex.rpe)+(ex.cue?' — '+ex.cue:'')+'</div>'
-      + rows
+      +'<div class="sub">Подход '+(i+1)+'/'+ex.sets+' · ориентир '+ex.weight+' · RPE '+ex.rpe+'</div>'
+      +'<div class="heads"><span>вес</span><span>повт</span><span>RPE</span></div>'
+      +'<div class="setrow">'
+      +'<input inputmode="decimal" id="f-w" value="'+w+'" placeholder="кг">'
+      +'<input inputmode="numeric" id="f-r" value="'+r+'" placeholder="повт">'
+      +'<input inputmode="decimal" id="f-rpe" value="'+rpe+'" placeholder="RPE"></div>'
       +'<div class="sheet-actions"><button class="btn ghost" id="m-cancel">Отмена</button>'
       +'<button class="btn primary" id="m-save">Сохранить</button></div>';
-    $("#m-cancel").onclick=closeSheet;
-    $("#m-save").onclick=saveSheet;
+    $("#m-cancel").onclick=closeSheet; $("#m-save").onclick=saveSet;
     $("#overlay").classList.add("open");
   }
-  function closeSheet(){ $("#overlay").classList.remove("open"); current=null; }
-  function saveSheet(){
-    const ex=current; const n = ex.dropset?3:ex.sets;
-    const arr=[];
-    for(let i=0;i<n;i++) arr.push({w:"",r:"",rpe:""});
-    $("#sheet").querySelectorAll("input").forEach(inp=>{
-      const i=+inp.dataset.i, f=inp.dataset.f;
-      arr[i][f] = inp.value.trim();
+  function saveSet(){
+    const {ex,i}=current;
+    if(!Array.isArray(state.sets[ex.code])) state.sets[ex.code]=[];
+    state.sets[ex.code][i]={ w:$("#f-w").value.trim(), r:$("#f-r").value.trim(), rpe:$("#f-rpe").value.trim() };
+    save(); closeSheet(); render();
+  }
+
+  // ---- модалка дроп-сета (3 веса) ----
+  function openDrop(ex){
+    current={ex,mode:"drop"};
+    const a = Array.isArray(state.sets[ex.code]) ? state.sets[ex.code] : [];
+    let rows="";
+    [8,6,4].forEach((rp,k)=>{
+      const v = a[k]&&a[k].w!==undefined ? a[k].w : "";
+      rows+='<div class="setrow drop"><div class="lbl">×'+rp+'</div>'
+        +'<input inputmode="decimal" data-k="'+k+'" value="'+v+'" placeholder="вес гантели"></div>';
     });
+    $("#sheet").innerHTML =
+      '<h2>'+ex.name+'</h2><div class="sub">'+ex.cue+'</div>'+rows
+      +'<div class="sheet-actions"><button class="btn ghost" id="m-cancel">Отмена</button>'
+      +'<button class="btn primary" id="m-save">Сохранить</button></div>';
+    $("#m-cancel").onclick=closeSheet; $("#m-save").onclick=saveDrop;
+    $("#overlay").classList.add("open");
+  }
+  function saveDrop(){
+    const ex=current.ex; const arr=[{w:""},{w:""},{w:""}];
+    $("#sheet").querySelectorAll("input").forEach(inp=>{ arr[+inp.dataset.k]={w:inp.value.trim()}; });
     state.sets[ex.code]=arr; save(); closeSheet(); render();
   }
+
+  function closeSheet(){ $("#overlay").classList.remove("open"); current=null; }
   $("#overlay").addEventListener("click",e=>{ if(e.target.id==="overlay") closeSheet(); });
 
-  // ---- footer card ----
+  // ---- футер «После сессии» ----
   function footerCard(){
     const fc=document.createElement("div"); fc.className="fcard";
     fc.innerHTML='<h3>После сессии</h3>';
@@ -338,27 +353,24 @@ const WORKOUT = {
     return fc;
   }
 
-  // ---- progress ----
+  // ---- прогресс по подходам ----
   function updateProgress(){
-    const total = flat.length;
-    const done = flat.filter(isDone).length;
-    $("#prog").style.width = (total? Math.round(done/total*100):0)+"%";
+    const rows=buildRows().filter(r=>r.ex);
+    const total=rows.length;
+    const done=rows.filter(r=>rowDone(r.ex,r.i)).length;
+    $("#prog").style.width=(total?Math.round(done/total*100):0)+"%";
   }
 
-  // ---- export ----
+  // ---- экспорт (группируется по упражнению — формат лога) ----
   function buildExport(){
     const L=[];
     L.push("#"+WORKOUT.id+" · "+WORKOUT.date+" · "+WORKOUT.title+" · "+WORKOUT.subtitle);
     L.push("");
     flat.forEach(ex=>{
-      if(ex.bodyweight){
-        L.push(ex.logName+": "+(state.sets[ex.code]?"✓ "+ex.weight:"—"));
-        return;
-      }
-      const d=state.sets[ex.code]||[];
+      if(ex.bodyweight){ L.push(ex.logName+": "+(state.sets[ex.code]===true?"✓ "+ex.weight:"—")); return; }
+      const d = Array.isArray(state.sets[ex.code]) ? state.sets[ex.code] : [];
       if(ex.dropset){
-        const v=[8,6,4].map((rp,i)=> rp+"("+((d[i]&&d[i].w!=="")?d[i].w:"_")+")").join(" → ");
-        L.push(ex.logName+": "+v);
+        L.push(ex.logName+": "+[8,6,4].map((rp,k)=> rp+"("+(d[k]&&d[k].w!==undefined&&d[k].w!==""?d[k].w:"_")+")").join(" → "));
         return;
       }
       const parts=[];
@@ -381,33 +393,22 @@ const WORKOUT = {
     return L.join("\n");
   }
 
-  function toast(msg){
-    const t=$("#toast"); t.textContent=msg; t.classList.add("show");
-    setTimeout(()=>t.classList.remove("show"),1800);
-  }
+  function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1800); }
 
   $("#export").onclick=async ()=>{
     const txt=buildExport();
-    try{
-      await navigator.clipboard.writeText(txt);
-      toast("Скопировано — вставь в чат с Claude");
-    }catch(e){
-      // фолбэк: показать в модалке для ручного копирования
+    try{ await navigator.clipboard.writeText(txt); toast("Скопировано — вставь в чат с Claude"); }
+    catch(e){
       const sheet=$("#sheet");
       sheet.innerHTML='<h2>Результаты</h2><div class="sub">Выдели и скопируй вручную</div>'
         +'<textarea class="exportbox" readonly>'+txt.replace(/</g,"&lt;")+'</textarea>'
         +'<div class="sheet-actions"><button class="btn primary" id="m-close">Закрыть</button></div>';
-      $("#m-close").onclick=closeSheet;
-      $("#overlay").classList.add("open");
+      $("#m-close").onclick=closeSheet; $("#overlay").classList.add("open");
       const ta=sheet.querySelector("textarea"); ta.focus(); ta.select();
     }
   };
 
-  $("#reset").onclick=()=>{
-    if(confirm("Очистить все введённые данные этой тренировки?")){
-      state={sets:{},footer:{}}; save(); render(); toast("Сброшено");
-    }
-  };
+  $("#reset").onclick=()=>{ if(confirm("Очистить все введённые данные этой тренировки?")){ state={sets:{},footer:{}}; save(); render(); toast("Сброшено"); } };
 
   render();
 })();
