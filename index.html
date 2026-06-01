@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0d0f14">
+<title>Тренировка</title>
+<style>
+  :root{
+    --bg:#0d0f14; --card:#171a22; --card2:#1f2330; --line:#2a2f3d;
+    --txt:#e8eaf0; --muted:#8b90a0; --accent:#4f8cff; --accent2:#6ad29a;
+    --warn:#e0a64a; --done:#6ad29a; --danger:#e0574a;
+    --radius:16px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  html,body{margin:0; background:var(--bg); color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    font-size:16px; line-height:1.4}
+  body{padding:0 0 96px; max-width:560px; margin:0 auto}
+  header{position:sticky; top:0; z-index:5; background:linear-gradient(180deg,var(--bg) 70%,transparent);
+    padding:14px 16px 10px}
+  header .title{font-size:20px; font-weight:700; letter-spacing:.2px}
+  header .sub{color:var(--muted); font-size:13px; margin-top:2px}
+  header .meta{color:var(--accent); font-size:13px; font-weight:600; margin-top:4px}
+  .progress{height:4px; background:var(--card); border-radius:4px; margin-top:10px; overflow:hidden}
+  .progress>i{display:block; height:100%; width:0; background:var(--accent2); transition:width .3s}
+  main{padding:4px 12px}
+  .group-name{font-size:12px; font-weight:700; color:var(--accent); letter-spacing:1px;
+    margin:18px 6px 4px; text-transform:uppercase}
+  .group-hint{font-size:12px; color:var(--muted); margin:0 6px 8px}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:14px; margin:8px 0; display:flex; align-items:center; gap:12px; cursor:pointer;
+    transition:background .15s, border-color .15s}
+  .card:active{background:var(--card2)}
+  .card.done{border-color:var(--done)}
+  .card.bodyweight{cursor:pointer}
+  .card .body{flex:1; min-width:0}
+  .card .row1{display:flex; align-items:baseline; gap:8px; flex-wrap:wrap}
+  .code{font-weight:800; color:var(--muted); font-size:13px; min-width:26px}
+  .name{font-weight:700; font-size:16px}
+  .badge{font-size:11px; background:var(--card2); color:var(--warn); padding:1px 7px;
+    border-radius:20px; border:1px solid var(--line)}
+  .rec{color:var(--muted); font-size:13px; margin-top:4px}
+  .rec b{color:var(--txt); font-weight:600}
+  .cue{color:var(--muted); font-size:12px; margin-top:5px; font-style:italic; opacity:.85}
+  .entered{color:var(--accent2); font-size:13px; margin-top:5px; font-variant-numeric:tabular-nums}
+  .check{width:26px; height:26px; border-radius:50%; border:2px solid var(--line);
+    flex:none; display:flex; align-items:center; justify-content:center; font-size:15px; color:transparent}
+  .card.done .check{background:var(--done); border-color:var(--done); color:#0d0f14}
+  /* footer card */
+  .fcard{background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:14px; margin:8px 0}
+  .fcard h3{margin:0 0 10px; font-size:13px; color:var(--accent); letter-spacing:1px; text-transform:uppercase}
+  .field{margin:10px 0}
+  .field label{display:block; font-size:13px; color:var(--muted); margin-bottom:4px}
+  .field input,.field textarea{width:100%; background:var(--bg); border:1px solid var(--line);
+    color:var(--txt); border-radius:10px; padding:10px 12px; font-size:16px; font-family:inherit}
+  .seg{display:flex; gap:6px}
+  .seg button{flex:1; background:var(--bg); border:1px solid var(--line); color:var(--muted);
+    padding:9px 4px; border-radius:10px; font-size:14px; cursor:pointer}
+  .seg button.on{background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600}
+  /* sticky actions */
+  .actions{position:fixed; left:0; right:0; bottom:0; z-index:6;
+    display:flex; gap:10px; padding:12px 14px calc(12px + env(safe-area-inset-bottom));
+    background:linear-gradient(0deg,var(--bg) 65%,transparent); max-width:560px; margin:0 auto}
+  .btn{flex:1; border:none; border-radius:14px; padding:15px; font-size:16px; font-weight:700;
+    cursor:pointer; font-family:inherit}
+  .btn.primary{background:var(--accent); color:#fff}
+  .btn.ghost{flex:0 0 auto; background:var(--card2); color:var(--muted); border:1px solid var(--line)}
+  /* modal */
+  .overlay{position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:10; display:none;
+    align-items:flex-end; justify-content:center}
+  .overlay.open{display:flex}
+  .sheet{background:var(--card); width:100%; max-width:560px; border-radius:20px 20px 0 0;
+    padding:18px 16px calc(18px + env(safe-area-inset-bottom)); max-height:88vh; overflow:auto;
+    animation:up .22s ease}
+  @keyframes up{from{transform:translateY(40px); opacity:.5}to{transform:none; opacity:1}}
+  .sheet h2{margin:0 0 2px; font-size:18px}
+  .sheet .sub{color:var(--muted); font-size:13px; margin-bottom:14px}
+  .setrow{display:grid; grid-template-columns:34px 1fr 1fr 1fr; gap:8px; align-items:center; margin:8px 0}
+  .setrow .lbl{color:var(--muted); font-size:13px; font-weight:700}
+  .setrow input{width:100%; background:var(--bg); border:1px solid var(--line); color:var(--txt);
+    border-radius:10px; padding:12px 6px; font-size:16px; text-align:center;
+    font-variant-numeric:tabular-nums}
+  .setrow input:focus{border-color:var(--accent); outline:none}
+  .heads{display:grid; grid-template-columns:34px 1fr 1fr 1fr; gap:8px; margin-bottom:2px}
+  .heads span{font-size:11px; color:var(--muted); text-align:center; text-transform:uppercase; letter-spacing:.5px}
+  .heads span:first-child{text-align:left}
+  .sheet-actions{display:flex; gap:10px; margin-top:18px}
+  .toast{position:fixed; bottom:90px; left:50%; transform:translateX(-50%); background:var(--accent2);
+    color:#0d0f14; font-weight:700; padding:12px 20px; border-radius:30px; z-index:20; opacity:0;
+    transition:opacity .25s, transform .25s; pointer-events:none; max-width:90%}
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(-6px)}
+  .exportbox{width:100%; height:240px; background:var(--bg); color:var(--txt); border:1px solid var(--line);
+    border-radius:12px; padding:12px; font-family:ui-monospace,Menlo,monospace; font-size:13px; margin-top:8px}
+</style>
+</head>
+<body>
+
+<!-- ===== ДАННЫЕ ТРЕНИРОВКИ — менять только этот объект перед сессией ===== -->
+<script>
+const WORKOUT = {
+  id: "58",
+  date: "02.06",
+  title: "Day 1 Upper A",
+  subtitle: "Phase 3 V-Taper · калибровка",
+  location: "Amersfoort",
+  groups: [
+    { name: "Суперсет 1", hint: "грудь ↔ задняя дельта · чередуй 1A → 1B → 1A …",
+      exercises: [
+        { code:"1A", name:"Incline DB Press 30°", logName:"Incline DB 30°", weight:"~26", reps:"6–10", rpe:"8–9", sets:3, def:{w:26,r:8,rpe:9},
+          cue:"лопатки сведены, первый в сессии — ЦНС свежа" },
+        { code:"1B", name:"Reverse Pec Deck", logName:"Reverse Pec Deck", weight:"~28–35", reps:"15", rpe:"8", sets:3, isNew:true, def:{w:30,r:15,rpe:8},
+          cue:"новый тренажёр — сфотать сетку; альт: Cable Face Pull rope ~20–25" },
+      ]},
+    { name: "Суперсет 2", hint: "широчайшая ↔ средняя дельта · чередуй 2A → 2B → 2A …",
+      exercises: [
+        { code:"2A", name:"Lat Pulldown ПРОНИР.", logName:"Lat Pulldown PRONATED", weight:"~72", reps:"8–12", rpe:"8–9", sets:3, isNew:true, def:{w:72,r:10,rpe:9},
+          cue:"пронированный хват (не нейтральный!) — главное изменение для V" },
+        { code:"2B", name:"Seated DB Lateral Raise", logName:"Lateral Raise (по)", weight:"по ~8", reps:"12–15", rpe:"8", sets:4, isNew:true, def:{w:8,r:13,rpe:8},
+          cue:"А-резерв: СТОП на 12, не дожимать до 15. Тянись к стенам" },
+      ]},
+    { name: "Плечевой жим",
+      exercises: [
+        { code:"3", name:"Seated DB Shoulder Press", logName:"DB Shoulder Press", weight:"~32 (по 16)", reps:"8–10", rpe:"8–9", sets:2, def:{w:32,r:9,rpe:9},
+          cue:"после махов — дельты уже подгружены" },
+      ]},
+    { name: "Финишер",
+      exercises: [
+        { code:"F", name:"Lateral Raise drop-set", logName:"Finisher LR drop", weight:"по 8 → 6 → 4", reps:"до отказа", rpe:"9", sets:3, dropset:true, def:{w:8,r:0,rpe:9},
+          cue:"три дропа подряд без пауз; пиши только вес" },
+      ]},
+    { name: "Кор",
+      exercises: [
+        { code:"C1", name:"Stomach Vacuum", logName:"Stomach Vacuum", weight:"4 × 20с", reps:"", rpe:"", bodyweight:true },
+        { code:"C2", name:"Dead Bug", logName:"Dead Bug", weight:"2 × 10", reps:"", rpe:"", bodyweight:true },
+      ]},
+  ],
+  footer: [
+    { key:"time", label:"Время сессии (мин)", type:"text", placeholder:"напр. 58" },
+    { key:"pump_delts", label:"Памп — дельты", type:"text", placeholder:"да / нет / слабо" },
+    { key:"pump_chest", label:"Памп — грудь", type:"text", placeholder:"да / нет / слабо" },
+    { key:"pump_back",  label:"Памп — спина", type:"text", placeholder:"да / нет / слабо" },
+    { key:"feeling", label:"Ощущение к концу", type:"seg", opts:["дотянул","мог ещё","развалился"] },
+    { key:"sleep", label:"Сон ночь / энергия утром", type:"text", placeholder:"напр. 7ч / свежий" },
+    { key:"grid_pecdeck", label:"Сетка reverse pec deck", type:"text", placeholder:"шаг плиток / диапазон" },
+    { key:"grid_facepull", label:"Сетка face pull (если делал)", type:"text", placeholder:"веса блока" },
+  ],
+};
+</script>
+
+<header>
+  <div class="title" id="h-title"></div>
+  <div class="sub" id="h-sub"></div>
+  <div class="meta" id="h-meta"></div>
+  <div class="progress"><i id="prog"></i></div>
+</header>
+
+<main id="main"></main>
+
+<div class="actions">
+  <button class="btn ghost" id="reset">Сброс</button>
+  <button class="btn primary" id="export">📋 Экспорт</button>
+</div>
+
+<!-- модалка ввода подходов -->
+<div class="overlay" id="overlay">
+  <div class="sheet" id="sheet"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+  const KEY = "workout-" + WORKOUT.id;
+  const $ = (s,el=document)=>el.querySelector(s);
+  const flat = WORKOUT.groups.flatMap(g=>g.exercises);
+
+  // ---- state ----
+  let state = load();
+  function load(){
+    try{ return JSON.parse(localStorage.getItem(KEY)) || {sets:{}, footer:{}}; }
+    catch(e){ return {sets:{}, footer:{}}; }
+  }
+  function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+
+  // ---- header ----
+  $("#h-title").textContent = "#"+WORKOUT.id+" · "+WORKOUT.title;
+  $("#h-sub").textContent = WORKOUT.subtitle;
+  $("#h-meta").textContent = WORKOUT.date+" · "+WORKOUT.location;
+
+  // ---- render list ----
+  function render(){
+    const main = $("#main");
+    main.innerHTML = "";
+    WORKOUT.groups.forEach(g=>{
+      const gn = document.createElement("div");
+      gn.className="group-name"; gn.textContent=g.name; main.appendChild(gn);
+      if(g.hint){ const h=document.createElement("div"); h.className="group-hint"; h.textContent=g.hint; main.appendChild(h); }
+      g.exercises.forEach(ex=>{
+        main.appendChild(card(ex));
+      });
+    });
+    // footer card
+    main.appendChild(footerCard());
+    updateProgress();
+  }
+
+  function card(ex){
+    const c = document.createElement("div");
+    c.className = "card" + (isDone(ex)?" done":"") + (ex.bodyweight?" bodyweight":"");
+    const body = document.createElement("div"); body.className="body";
+    const row1 = document.createElement("div"); row1.className="row1";
+    row1.innerHTML = '<span class="code">'+ex.code+'</span><span class="name">'+ex.name+'</span>'
+      + (ex.isNew?'<span class="badge">⚙️ калибровка</span>':'');
+    body.appendChild(row1);
+
+    if(!ex.bodyweight){
+      const rec=document.createElement("div"); rec.className="rec";
+      rec.innerHTML = '<b>'+ex.weight+'</b> · '+ex.sets+'×'+ex.reps+' · RPE '+ex.rpe;
+      body.appendChild(rec);
+    } else {
+      const rec=document.createElement("div"); rec.className="rec";
+      rec.innerHTML='<b>'+ex.weight+'</b>'; body.appendChild(rec);
+    }
+    if(ex.cue){ const q=document.createElement("div"); q.className="cue"; q.textContent=ex.cue; body.appendChild(q); }
+
+    const entered = enteredText(ex);
+    if(entered){ const e=document.createElement("div"); e.className="entered"; e.textContent=entered; body.appendChild(e); }
+
+    const chk=document.createElement("div"); chk.className="check"; chk.textContent="✓";
+    c.appendChild(body); c.appendChild(chk);
+    c.addEventListener("click", ()=> ex.bodyweight ? toggleBody(ex) : openSheet(ex));
+    return c;
+  }
+
+  function isDone(ex){
+    if(ex.bodyweight) return !!state.sets[ex.code];
+    const d = state.sets[ex.code];
+    return d && d.some(s=> s && (s.w!=="" || s.r!=="" || s.rpe!==""));
+  }
+  function enteredText(ex){
+    if(ex.bodyweight) return state.sets[ex.code] ? "сделано ✓" : "";
+    const d = state.sets[ex.code]; if(!d) return "";
+    if(ex.dropset){
+      return d.map((s,i)=> [8,6,4][i]+"("+(s&&s.w!==""?s.w:"_")+")").join(" → ");
+    }
+    return d.map((s,i)=> "п"+(i+1)+" "+((s&&s.w!=="")?s.w:"_")+"×"+((s&&s.r!=="")?s.r:"_")
+      +((s&&s.rpe!=="")?" R"+s.rpe:"")).join("  ");
+  }
+
+  function toggleBody(ex){
+    state.sets[ex.code] = state.sets[ex.code] ? null : true;
+    if(!state.sets[ex.code]) delete state.sets[ex.code];
+    save(); render();
+  }
+
+  // ---- modal ----
+  let current=null;
+  function openSheet(ex){
+    current=ex;
+    const sheet=$("#sheet");
+    const existing = state.sets[ex.code] || [];
+    let rows="";
+    const labels = ex.dropset ? ["8","6","4"] : Array.from({length:ex.sets},(_,i)=>"п"+(i+1));
+    if(!ex.dropset){
+      rows += '<div class="heads"><span></span><span>вес</span><span>повт</span><span>RPE</span></div>';
+    } else {
+      rows += '<div class="heads"><span>повт</span><span>вес</span><span></span><span></span></div>';
+    }
+    for(let i=0;i<labels.length;i++){
+      const s = existing[i] || {};
+      const w = s.w!==undefined?s.w:(i===0?(ex.def&&ex.def.w!==undefined?ex.def.w:""):"");
+      const r = s.r!==undefined?s.r:(ex.def&&ex.def.r?ex.def.r:"");
+      const rpe = s.rpe!==undefined?s.rpe:(ex.def&&ex.def.rpe?ex.def.rpe:"");
+      if(ex.dropset){
+        rows += '<div class="setrow"><div class="lbl">'+labels[i]+'</div>'
+          +'<input inputmode="decimal" data-i="'+i+'" data-f="w" value="'+(s.w!==undefined?s.w:"")+'" placeholder="вес">'
+          +'<div></div><div></div></div>';
+      } else {
+        rows += '<div class="setrow"><div class="lbl">'+labels[i]+'</div>'
+          +'<input inputmode="decimal" data-i="'+i+'" data-f="w" value="'+w+'" placeholder="кг">'
+          +'<input inputmode="numeric" data-i="'+i+'" data-f="r" value="'+r+'" placeholder="повт">'
+          +'<input inputmode="decimal" data-i="'+i+'" data-f="rpe" value="'+rpe+'" placeholder="RPE"></div>';
+      }
+    }
+    sheet.innerHTML =
+      '<h2>'+ex.code+' · '+ex.name+'</h2>'
+      +'<div class="sub">Ориентир: '+ex.weight+(ex.dropset?'':' · RPE '+ex.rpe)+(ex.cue?' — '+ex.cue:'')+'</div>'
+      + rows
+      +'<div class="sheet-actions"><button class="btn ghost" id="m-cancel">Отмена</button>'
+      +'<button class="btn primary" id="m-save">Сохранить</button></div>';
+    $("#m-cancel").onclick=closeSheet;
+    $("#m-save").onclick=saveSheet;
+    $("#overlay").classList.add("open");
+  }
+  function closeSheet(){ $("#overlay").classList.remove("open"); current=null; }
+  function saveSheet(){
+    const ex=current; const n = ex.dropset?3:ex.sets;
+    const arr=[];
+    for(let i=0;i<n;i++) arr.push({w:"",r:"",rpe:""});
+    $("#sheet").querySelectorAll("input").forEach(inp=>{
+      const i=+inp.dataset.i, f=inp.dataset.f;
+      arr[i][f] = inp.value.trim();
+    });
+    state.sets[ex.code]=arr; save(); closeSheet(); render();
+  }
+  $("#overlay").addEventListener("click",e=>{ if(e.target.id==="overlay") closeSheet(); });
+
+  // ---- footer card ----
+  function footerCard(){
+    const fc=document.createElement("div"); fc.className="fcard";
+    fc.innerHTML='<h3>После сессии</h3>';
+    WORKOUT.footer.forEach(f=>{
+      const wrap=document.createElement("div"); wrap.className="field";
+      const lab=document.createElement("label"); lab.textContent=f.label; wrap.appendChild(lab);
+      if(f.type==="seg"){
+        const seg=document.createElement("div"); seg.className="seg";
+        f.opts.forEach(o=>{
+          const b=document.createElement("button"); b.textContent=o;
+          if(state.footer[f.key]===o) b.classList.add("on");
+          b.onclick=()=>{ state.footer[f.key]= state.footer[f.key]===o?"":o; save(); render(); };
+          seg.appendChild(b);
+        });
+        wrap.appendChild(seg);
+      } else {
+        const inp=document.createElement("input"); inp.type="text"; inp.placeholder=f.placeholder||"";
+        inp.value=state.footer[f.key]||"";
+        inp.oninput=()=>{ state.footer[f.key]=inp.value; save(); };
+        wrap.appendChild(inp);
+      }
+      fc.appendChild(wrap);
+    });
+    return fc;
+  }
+
+  // ---- progress ----
+  function updateProgress(){
+    const total = flat.length;
+    const done = flat.filter(isDone).length;
+    $("#prog").style.width = (total? Math.round(done/total*100):0)+"%";
+  }
+
+  // ---- export ----
+  function buildExport(){
+    const L=[];
+    L.push("#"+WORKOUT.id+" · "+WORKOUT.date+" · "+WORKOUT.title+" · "+WORKOUT.subtitle);
+    L.push("");
+    flat.forEach(ex=>{
+      if(ex.bodyweight){
+        L.push(ex.logName+": "+(state.sets[ex.code]?"✓ "+ex.weight:"—"));
+        return;
+      }
+      const d=state.sets[ex.code]||[];
+      if(ex.dropset){
+        const v=[8,6,4].map((rp,i)=> rp+"("+((d[i]&&d[i].w!=="")?d[i].w:"_")+")").join(" → ");
+        L.push(ex.logName+": "+v);
+        return;
+      }
+      const parts=[];
+      for(let i=0;i<ex.sets;i++){
+        const s=d[i]||{};
+        const w=(s.w!==undefined&&s.w!=="")?s.w:"_";
+        const r=(s.r!==undefined&&s.r!=="")?s.r:"_";
+        const rpe=(s.rpe!==undefined&&s.rpe!=="")?" RPE"+s.rpe:"";
+        parts.push("п"+(i+1)+" "+w+"×"+r+rpe);
+      }
+      L.push(ex.logName+": "+parts.join("  "));
+    });
+    L.push("");
+    const f=state.footer;
+    L.push("Время: "+(f.time||""));
+    L.push("Памп: дельты "+(f.pump_delts||"_")+" / грудь "+(f.pump_chest||"_")+" / спина "+(f.pump_back||"_"));
+    L.push("Ощущение: "+(f.feeling||""));
+    L.push("Сон ночь / энергия: "+(f.sleep||""));
+    L.push("Сетки: reverse pec deck "+(f.grid_pecdeck||"_")+", face pull "+(f.grid_facepull||"_"));
+    return L.join("\n");
+  }
+
+  function toast(msg){
+    const t=$("#toast"); t.textContent=msg; t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"),1800);
+  }
+
+  $("#export").onclick=async ()=>{
+    const txt=buildExport();
+    try{
+      await navigator.clipboard.writeText(txt);
+      toast("Скопировано — вставь в чат с Claude");
+    }catch(e){
+      // фолбэк: показать в модалке для ручного копирования
+      const sheet=$("#sheet");
+      sheet.innerHTML='<h2>Результаты</h2><div class="sub">Выдели и скопируй вручную</div>'
+        +'<textarea class="exportbox" readonly>'+txt.replace(/</g,"&lt;")+'</textarea>'
+        +'<div class="sheet-actions"><button class="btn primary" id="m-close">Закрыть</button></div>';
+      $("#m-close").onclick=closeSheet;
+      $("#overlay").classList.add("open");
+      const ta=sheet.querySelector("textarea"); ta.focus(); ta.select();
+    }
+  };
+
+  $("#reset").onclick=()=>{
+    if(confirm("Очистить все введённые данные этой тренировки?")){
+      state={sets:{},footer:{}}; save(); render(); toast("Сброшено");
+    }
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>
