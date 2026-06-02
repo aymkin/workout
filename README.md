@@ -1,6 +1,6 @@
 # workout
 
-Личный мобильный трекер тренировок. Одна самодостаточная страница (`index.html`), без сборки и зависимостей.
+Личный мобильный трекер тренировок. Статическая страница (`index.html`, движок) + данные в `workouts.json`, без сборки и зависимостей.
 
 **Открыть:** https://aymkin.github.io/workout/
 
@@ -20,27 +20,30 @@
 
 ## Как обновить под следующую тренировку
 
-Вся программа задаётся объектом `WORKOUT` вверху `index.html`. Меняешь только его:
+Все данные — в `workouts.json` (форма `{ "footer": [...], "workouts": [...] }`). Меняешь только его, `index.html` трогать не нужно. Страница грузит JSON при старте.
 
-```js
-const WORKOUT = {
-  id: "59",                 // новый id → новый ключ localStorage (прошлая сессия не теряется)
-  date: "05.06",
-  title: "Day 2 Upper B",
-  subtitle: "...",
-  location: "Amersfoort",
-  groups: [ /* группы и упражнения */ ],
-  footer: [ /* поля «После сессии» */ ],
-};
+```json
+{
+  "footer": [ /* поля «После сессии», общие для всех сессий */ ],
+  "workouts": [
+    {
+      "id": "59",                 // новый id → новый ключ localStorage (прошлая сессия не теряется)
+      "day": "Пт", "date": "05.06",
+      "title": "Day 2 Upper B", "subtitle": "...",
+      "location": "Amersfoort",
+      "groups": [ /* группы и упражнения */ ]
+    }
+  ]
+}
 ```
 
 Поля упражнения: `code`, `name`, `logName` (как пишется в экспорт), `weight`, `reps`, `rpe`, `sets`,
-`def:{w,r,rpe}` (дефолты для префилла), `cue`, `isNew` (бейдж калибровки), `dropset`, `bodyweight`.
+`def:{w,r,rpe}` (дефолты для префилла), `cue`, `isNew` (бейдж калибровки), `dropset`+`drops:[...]`, `bodyweight`.
 
 После правки:
 
 ```sh
-git add -A && git commit -m "workout #59" && git push
+git add -A && git commit -m "workouts: ..." && git push
 ```
 
-GitHub Pages пересоберётся за ~1 мин. URL тот же.
+GitHub Pages пересоберётся за ~1 мин. URL тот же. При изменении кода движка/`sw.js` или *формы* JSON — подними `CACHE` в `sw.js`.

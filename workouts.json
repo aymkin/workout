@@ -1,0 +1,86 @@
+{
+  "footer": [
+    { "key": "pump_delts", "label": "Памп — дельты", "placeholder": "да / нет / слабо" },
+    { "key": "pump_chest", "label": "Памп — грудь", "placeholder": "да / нет / слабо" },
+    { "key": "pump_back", "label": "Памп — спина", "placeholder": "да / нет / слабо" },
+    { "key": "feeling", "label": "Ощущение к концу", "type": "seg", "opts": ["дотянул", "мог ещё", "развалился"] },
+    { "key": "sleep", "label": "Сон ночь / энергия утром", "placeholder": "напр. 7ч / свежий" },
+    { "key": "notes", "label": "Заметки (замены, тренажёры, сетки)", "placeholder": "свободный текст" }
+  ],
+  "workouts": [
+    {
+      "id": "58", "day": "Вт", "date": "02.06", "title": "Day 1 Upper A", "subtitle": "Phase 3 V-Taper · горизонт + дельты",
+      "location": "Amersfoort",
+      "groups": [
+        { "name": "Суперсет 1", "hint": "грудь ↔ задняя дельта · чередуй 1A → 1B", "exercises": [
+          { "code": "1A", "name": "Incline DB Press 30°", "logName": "Incline DB 30°", "weight": "~26", "reps": "6–10", "rpe": "8–9", "sets": 3, "def": { "w": 26, "r": 8, "rpe": 9 }, "cue": "первый в сессии — ЦНС свежа" },
+          { "code": "1B", "name": "Reverse DB Fly 30°", "logName": "Reverse DB Fly", "weight": "~16", "reps": "15", "rpe": "8", "sets": 3, "def": { "w": 16, "r": 15, "rpe": 8 }, "cue": "та же скамья 30°, лёжа грудью; задняя дельта" }
+        ]},
+        { "name": "Суперсет 2", "hint": "широчайшая ↔ средняя дельта · 2A → 2B (+ 4-й мах соло)", "exercises": [
+          { "code": "2A", "name": "Lat Pulldown ПРОНИР.", "logName": "Lat Pulldown PRONATED", "weight": "~72", "reps": "8–12", "rpe": "8–9", "sets": 3, "def": { "w": 72, "r": 10, "rpe": 9 }, "cue": "пронированный хват; тянуть локтями вниз-назад" },
+          { "code": "2B", "name": "Seated DB Lateral Raise", "logName": "Lateral Raise (по)", "weight": "по 6", "reps": "12–15", "rpe": "8", "sets": 4, "def": { "w": 6, "r": 13, "rpe": 8 }, "cue": "6 кг (калибровка #58); цель 12-15; тянись к стенам" }
+        ]},
+        { "name": "Плечевой жим", "exercises": [
+          { "code": "3", "name": "Seated DB Shoulder Press", "logName": "DB Shoulder Press", "weight": "~32 (по 16)", "reps": "8–10", "rpe": "8–9", "sets": 2, "def": { "w": 32, "r": 9, "rpe": 9 }, "cue": "после махов — дельты подгружены" }
+        ]},
+        { "name": "Финишер", "exercises": [
+          { "code": "F", "name": "Lateral Raise drop-set", "logName": "Finisher LR drop", "weight": "8 → 6 → 4", "reps": "до отказа", "rpe": "9", "dropset": true, "drops": [8, 6, 4], "cue": "три дропа подряд; впиши повторы на каждом весе" }
+        ]},
+        { "name": "Кор", "exercises": [
+          { "code": "C1", "name": "Stomach Vacuum", "logName": "Stomach Vacuum", "weight": "4 × 20с", "bodyweight": true },
+          { "code": "C2", "name": "Dead Bug", "logName": "Dead Bug", "weight": "2 × 10", "bodyweight": true }
+        ]}
+      ]
+    },
+    {
+      "id": "59", "day": "Пт", "date": "05.06", "title": "Day 2 Upper B", "subtitle": "Phase 3 V-Taper · вертикаль + руки",
+      "location": "Amersfoort",
+      "groups": [
+        { "name": "Суперсет 1", "hint": "широчайшая ↔ верх груди · 1A → 1B", "exercises": [
+          { "code": "1A", "name": "Pull-up / Gravitron", "logName": "Pull-up/Gravitron", "weight": "свой / ассист", "reps": "6–10", "rpe": "8–9", "sets": 3, "isNew": true, "def": { "r": 8, "rpe": 8 }, "cue": "вис декомпрессирует L4; ассист если строгих <8" },
+          { "code": "1B", "name": "Incline DB Press 30°", "logName": "Incline DB 30°", "weight": "~26", "reps": "10–12", "rpe": "8", "sets": 3, "def": { "w": 26, "r": 11, "rpe": 8 }, "cue": "чуть легче/больше повторов, чем в Day 1" }
+        ]},
+        { "name": "Суперсет 2", "hint": "широчайшая стрейч ↔ средняя дельта · 2A → 2B (+4-й соло)", "exercises": [
+          { "code": "2A", "name": "Straight-Arm Pulldown", "logName": "Straight-Arm Pulldown", "weight": "калибровка", "reps": "12–15", "rpe": "8", "sets": 3, "isNew": true, "def": { "r": 13, "rpe": 8 }, "cue": "руки прямые, изолируй широчайшую; сфотать сетку" },
+          { "code": "2B", "name": "Seated DB Lateral Raise", "logName": "Lateral Raise (по)", "weight": "по 6", "reps": "12–15", "rpe": "8", "sets": 4, "def": { "w": 6, "r": 13, "rpe": 8 }, "cue": "6 кг; главный драйвер V — гнать к 12-15" }
+        ]},
+        { "name": "Руки (суперсет)", "hint": "бицепс ↔ трицепс · 3A → 3B", "exercises": [
+          { "code": "3A", "name": "DB Biceps Curl", "logName": "Biceps Curl (по)", "weight": "по 14", "reps": "10–12", "rpe": "9", "sets": 3, "def": { "w": 14, "r": 11, "rpe": 9 } },
+          { "code": "3B", "name": "Cable Triceps Push-down", "logName": "Triceps Push-down", "weight": "~32", "reps": "10–12", "rpe": "9", "sets": 3, "def": { "w": 32, "r": 11, "rpe": 9 } }
+        ]},
+        { "name": "Финишер", "exercises": [
+          { "code": "F", "name": "Lateral Raise myo-reps", "logName": "Finisher LR myo", "weight": "по 6", "reps": "актив + мини", "rpe": "9", "sets": 1, "def": { "w": 6, "r": 15, "rpe": 9 }, "cue": "1 актив-сет до RPE9, затем мини-сеты 3-5 повт с паузой 10-15с; впиши общий итог" }
+        ]},
+        { "name": "Кор", "exercises": [
+          { "code": "C1", "name": "Stomach Vacuum", "logName": "Stomach Vacuum", "weight": "4 × 20с", "bodyweight": true },
+          { "code": "C2", "name": "Dead Bug", "logName": "Dead Bug", "weight": "2 × 10", "bodyweight": true }
+        ]}
+      ]
+    },
+    {
+      "id": "60", "day": "Вс", "date": "07.06", "title": "Day 3 Lower + Core", "subtitle": "Phase 3 V-Taper · ноги ~25% + кор",
+      "location": "Hilversum",
+      "groups": [
+        { "name": "Ноги", "exercises": [
+          { "code": "1", "name": "Leg Press", "logName": "Leg Press", "weight": "~141", "reps": "8–12", "rpe": "8–9", "sets": 3, "def": { "w": 141, "r": 9, "rpe": 9 }, "cue": "L4-safe; без осевой компрессии" }
+        ]},
+        { "name": "Квадрицепс ↔ бицепс бедра (суперсет)", "hint": "2A → 2B", "exercises": [
+          { "code": "2A", "name": "Leg Extension", "logName": "Leg Extension", "weight": "~86", "reps": "12–15", "rpe": "8", "sets": 2, "def": { "w": 86, "r": 13, "rpe": 8 }, "cue": "апгрейд 79→86 (заработан #55)" },
+          { "code": "2B", "name": "Leg Curl", "logName": "Leg Curl", "weight": "~61", "reps": "12–15", "rpe": "8", "sets": 2, "def": { "w": 61, "r": 13, "rpe": 8 }, "cue": "если тренажёр сломан — Hip Thrust" }
+        ]},
+        { "name": "Икры", "exercises": [
+          { "code": "3", "name": "Calf Raise", "logName": "Calf Raise", "weight": "калибровка", "reps": "12–15", "rpe": "8", "sets": 3, "isNew": true, "def": { "r": 13, "rpe": 8 }, "cue": "сфотать сетку" }
+        ]},
+        { "name": "Дельта (добор частоты 3×)", "exercises": [
+          { "code": "4", "name": "Seated DB Lateral Raise", "logName": "Lateral Raise (по)", "weight": "по 6", "reps": "15", "rpe": "8", "sets": 3, "def": { "w": 6, "r": 15, "rpe": 8 }, "cue": "3-й день частоты боковой дельты за неделю" }
+        ]},
+        { "name": "Кор (стабилизация)", "exercises": [
+          { "code": "C1", "name": "Pallof Press", "logName": "Pallof Press", "weight": "2 × 12 / сторону", "bodyweight": true },
+          { "code": "C2", "name": "Bird Dog", "logName": "Bird Dog", "weight": "2 × 8 / сторону", "bodyweight": true },
+          { "code": "C3", "name": "Plank", "logName": "Plank", "weight": "2 × 45с", "bodyweight": true },
+          { "code": "C4", "name": "Stomach Vacuum", "logName": "Stomach Vacuum", "weight": "4 × 20с", "bodyweight": true }
+        ]}
+      ]
+    }
+  ]
+}

@@ -1,8 +1,8 @@
-// Service worker: network-first для страницы (свежие данные онлайн),
+// Service worker: network-first для страницы и workouts.json (свежие данные онлайн),
 // cache-first для иконок/манифеста. Офлайн в зале — отдаём кэш.
-const CACHE = "workout-v4";
+const CACHE = "workout-v5";
 const ASSETS = [
-  "./", "./index.html", "./manifest.webmanifest",
+  "./", "./index.html", "./workouts.json", "./manifest.webmanifest",
   "./icon-192.png", "./icon-512.png", "./icon-180.png"
 ];
 
@@ -20,14 +20,17 @@ self.addEventListener("activate", e => {
 self.addEventListener("fetch", e => {
   const req = e.request;
   if (req.method !== "GET") return;
-  // навигация (HTML) → сеть, потом кэш
-  if (req.mode === "navigate") {
+  const url = new URL(req.url);
+  const isData = url.pathname.endsWith("workouts.json");
+  // навигация (HTML) и данные → сеть, потом кэш
+  if (req.mode === "navigate" || isData) {
+    const key = req.mode === "navigate" ? "./index.html" : "./workouts.json";
     e.respondWith(
       fetch(req).then(res => {
         const copy = res.clone();
-        caches.open(CACHE).then(c => c.put("./index.html", copy));
+        caches.open(CACHE).then(c => c.put(key, copy));
         return res;
-      }).catch(() => caches.match("./index.html"))
+      }).catch(() => caches.match(key))
     );
     return;
   }
