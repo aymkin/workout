@@ -1,6 +1,6 @@
 // Service worker: network-first для страницы (свежие данные онлайн),
 // cache-first для иконок/манифеста. Офлайн в зале — отдаём кэш.
-const CACHE = "workout-v2";
+const CACHE = "workout-v3";
 const ASSETS = [
   "./", "./index.html", "./manifest.webmanifest",
   "./icon-192.png", "./icon-512.png", "./icon-180.png"

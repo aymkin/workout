@@ -101,6 +101,25 @@
   .toast.show{opacity:1; transform:translateX(-50%) translateY(-6px)}
   .exportbox{width:100%; height:240px; background:var(--bg); color:var(--txt); border:1px solid var(--line);
     border-radius:12px; padding:12px; font-family:ui-monospace,Menlo,monospace; font-size:13px; margin-top:8px}
+  /* clock / start */
+  .clockbar{display:flex; align-items:center; gap:12px; margin-top:10px}
+  .startbtn{background:var(--accent2); color:#0d0f14; border:none; border-radius:10px;
+    padding:8px 18px; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit}
+  .startbtn.run{background:var(--card2); color:var(--txt); border:1px solid var(--line)}
+  .elapsed{font-variant-numeric:tabular-nums; font-weight:700; font-size:16px; color:var(--txt)}
+  .elapsed.idle{color:var(--muted); font-weight:400; font-size:14px}
+  /* rest timer */
+  .rest{position:fixed; left:0; right:0; bottom:74px; z-index:7; max-width:560px; margin:0 auto;
+    padding:0 14px; transform:translateY(160%); transition:transform .25s}
+  .rest.show{transform:none}
+  .rest-inner{background:var(--card2); border:1px solid var(--line); border-radius:14px;
+    padding:10px 12px; display:flex; align-items:center; gap:10px; box-shadow:0 6px 24px rgba(0,0,0,.4)}
+  .rest .time{font-size:26px; font-weight:800; font-variant-numeric:tabular-nums; min-width:78px; text-align:center}
+  .rest .time.done{color:var(--accent2)}
+  .rest .chips{display:flex; gap:6px; flex:1; flex-wrap:wrap; justify-content:flex-end}
+  .rest .chips button{background:var(--bg); border:1px solid var(--line); color:var(--muted);
+    border-radius:8px; padding:7px 9px; font-size:13px; cursor:pointer; font-variant-numeric:tabular-nums}
+  .rest .x{background:none; border:none; color:var(--muted); font-size:20px; cursor:pointer; padding:4px 6px}
 </style>
 </head>
 <body>
@@ -145,7 +164,6 @@ const WORKOUT = {
       ]},
   ],
   footer: [
-    { key:"time", label:"Время сессии (мин)", placeholder:"напр. 58" },
     { key:"pump_delts", label:"Памп — дельты", placeholder:"да / нет / слабо" },
     { key:"pump_chest", label:"Памп — грудь", placeholder:"да / нет / слабо" },
     { key:"pump_back",  label:"Памп — спина", placeholder:"да / нет / слабо" },
@@ -161,14 +179,26 @@ const WORKOUT = {
   <div class="title" id="h-title"></div>
   <div class="sub" id="h-sub"></div>
   <div class="meta" id="h-meta"></div>
+  <div class="clockbar">
+    <button class="startbtn" id="startbtn">▶ Старт</button>
+    <span class="elapsed idle" id="elapsed">не начата</span>
+  </div>
   <div class="progress"><i id="prog"></i></div>
 </header>
 
 <main id="main"></main>
 
+<div class="rest" id="rest">
+  <div class="rest-inner">
+    <span class="time" id="rest-time">1:30</span>
+    <div class="chips" id="rest-chips"></div>
+    <button class="x" id="rest-x">✕</button>
+  </div>
+</div>
+
 <div class="actions">
   <button class="btn ghost" id="reset">Сброс</button>
-  <button class="btn primary" id="export">📋 Экспорт</button>
+  <button class="btn primary" id="export" style="display:none">📋 Экспорт</button>
 </div>
 
 <div class="overlay" id="overlay"><div class="sheet" id="sheet"></div></div>
@@ -189,6 +219,55 @@ const WORKOUT = {
     catch(e){ return {sets:{}, footer:{}}; }
   }
   function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
+
+  // ---- время: форматтеры и таймстампы ----
+  function now(){ return Date.now(); }
+  function fmtClock(ms){ const d=new Date(ms); return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
+  function fmtMMSS(sec){ sec=Math.max(0,Math.round(sec)); return Math.floor(sec/60)+":"+String(sec%60).padStart(2,"0"); }
+  function allTimes(){ const ts=[]; Object.keys(state.sets).forEach(k=>{ const v=state.sets[k];
+    if(Array.isArray(v)) v.forEach(s=>{ if(s&&s.t) ts.push(s.t); }); else if(v&&v.t) ts.push(v.t); }); return ts; }
+  function startTs(){ if(state.startedAt) return state.startedAt; const ts=allTimes(); return ts.length?Math.min.apply(null,ts):null; }
+  function finishTs(){ if(state.finishedAt) return state.finishedAt; const ts=allTimes(); return ts.length?Math.max.apply(null,ts):null; }
+  function exFirstT(ex){ const v=state.sets[ex.code]; if(Array.isArray(v)){ const ts=v.filter(s=>s&&s.t).map(s=>s.t); return ts.length?Math.min.apply(null,ts):null; } return (v&&v.t)?v.t:null; }
+
+  // ---- кнопка Старт/Завершить + часы сессии ----
+  const startBtn=$("#startbtn"), elapsedEl=$("#elapsed"), exportBtn=$("#export");
+  function renderClock(){
+    if(state.finishedAt){ const st=startTs()||state.finishedAt;
+      startBtn.textContent="▶ Возобновить"; startBtn.className="startbtn";
+      elapsedEl.className="elapsed"; elapsedEl.textContent="⏱ "+fmtMMSS((state.finishedAt-st)/1000)+" · завершена";
+      exportBtn.style.display=""; return; }
+    exportBtn.style.display="none";
+    if(state.startedAt){ startBtn.textContent="✓ Завершить тренировку"; startBtn.className="startbtn run";
+      elapsedEl.className="elapsed"; elapsedEl.textContent="⏱ "+fmtMMSS((now()-state.startedAt)/1000); return; }
+    startBtn.textContent="▶ Старт"; startBtn.className="startbtn"; elapsedEl.className="elapsed idle"; elapsedEl.textContent="не начата";
+  }
+  startBtn.onclick=()=>{
+    if(state.finishedAt){ delete state.finishedAt; save(); renderClock(); return; }      // возобновить
+    if(state.startedAt){ state.finishedAt=now(); save(); stopRest(); renderClock(); toast("Тренировка завершена — жми Экспорт"); return; }
+    state.startedAt=now(); delete state.finishedAt; save(); renderClock();
+  };
+  setInterval(()=>{ if(state.startedAt && !state.finishedAt) renderClock(); }, 1000);
+
+  // ---- таймер отдыха ----
+  const restEl=$("#rest"), restTimeEl=$("#rest-time"), restChips=$("#rest-chips");
+  const REST_PRESETS=[30,45,60,90,120]; let restEnd=0, restInt=null, restPlayed=false;
+  REST_PRESETS.forEach(s=>{ const b=document.createElement("button"); b.textContent=fmtMMSS(s); b.onclick=()=>startRest(s); restChips.appendChild(b); });
+  function startRest(sec){ restEnd=now()+sec*1000; restPlayed=false; restEl.classList.add("show"); restTimeEl.classList.remove("done");
+    if(restInt) clearInterval(restInt); restInt=setInterval(restStep,250); restStep(); }
+  function restStep(){ const left=(restEnd-now())/1000;
+    if(left<=0){ restTimeEl.textContent="0:00"; restTimeEl.classList.add("done"); if(!restPlayed){ restPlayed=true; buzz(); } clearInterval(restInt); return; }
+    restTimeEl.textContent=fmtMMSS(left); }
+  function stopRest(){ if(restInt) clearInterval(restInt); restEl.classList.remove("show"); }
+  $("#rest-x").onclick=stopRest;
+  function buzz(){ try{ if(navigator.vibrate) navigator.vibrate([200,100,200]); }catch(e){}
+    try{ const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return; const a=new AC(); const o=a.createOscillator(), g=a.createGain();
+      o.connect(g); g.connect(a.destination); o.type="sine"; o.frequency.value=880;
+      g.gain.setValueAtTime(0.0001,a.currentTime); g.gain.exponentialRampToValueAtTime(0.3,a.currentTime+0.02); g.gain.exponentialRampToValueAtTime(0.0001,a.currentTime+0.6);
+      o.start(); o.stop(a.currentTime+0.6); }catch(e){} }
+
+  // авто-старт сессии при первом логе + запуск таймера отдыха
+  function afterLog(){ if(!state.startedAt && !state.finishedAt) state.startedAt=now(); save(); renderClock(); if(!state.finishedAt) startRest(90); }
 
   // ---- header ----
   $("#h-title").textContent = "#"+WORKOUT.id+" · "+WORKOUT.title;
@@ -212,13 +291,13 @@ const WORKOUT = {
   function filled(s){ return s && [s.w,s.r,s.rpe].some(v=> v!==undefined && v!==""); }
 
   function rowDone(ex,i){
-    if(ex.bodyweight) return state.sets[ex.code]===true;
+    if(ex.bodyweight) return !!state.sets[ex.code];
     if(ex.dropset){ const a=state.sets[ex.code]; return Array.isArray(a) && a.some(s=> s && ((s.w!==undefined&&s.w!=="")||(s.r!==undefined&&s.r!==""))); }
     return filled(setEntry(ex.code,i));
   }
 
   function enteredText(ex,i){
-    if(ex.bodyweight) return state.sets[ex.code]===true ? "сделано ✓" : "";
+    if(ex.bodyweight) return state.sets[ex.code] ? "сделано ✓" : "";
     if(ex.dropset){
       const a=state.sets[ex.code]; if(!Array.isArray(a)) return "";
       const drops=ex.drops||[];
@@ -272,9 +351,9 @@ const WORKOUT = {
   }
 
   function toggleBody(ex){
-    if(state.sets[ex.code]===true) delete state.sets[ex.code];
-    else state.sets[ex.code]=true;
-    save(); render();
+    if(state.sets[ex.code]) delete state.sets[ex.code];
+    else state.sets[ex.code]={t:now()};
+    save(); renderClock(); render();
   }
 
   // ---- модалка одного подхода ----
@@ -302,8 +381,8 @@ const WORKOUT = {
   function saveSet(){
     const {ex,i}=current;
     if(!Array.isArray(state.sets[ex.code])) state.sets[ex.code]=[];
-    state.sets[ex.code][i]={ w:$("#f-w").value.trim(), r:$("#f-r").value.trim(), rpe:$("#f-rpe").value.trim() };
-    save(); closeSheet(); render();
+    state.sets[ex.code][i]={ w:$("#f-w").value.trim(), r:$("#f-r").value.trim(), rpe:$("#f-rpe").value.trim(), t:now() };
+    closeSheet(); afterLog(); render();
   }
 
   // ---- модалка дроп-сета (3 веса) ----
@@ -331,7 +410,7 @@ const WORKOUT = {
     const ex=current.ex; const drops=ex.drops||[8,6,4];
     const arr=drops.map(()=>({w:"",r:""}));
     $("#sheet").querySelectorAll("input").forEach(inp=>{ arr[+inp.dataset.k][inp.dataset.f]=inp.value.trim(); });
-    state.sets[ex.code]=arr; save(); closeSheet(); render();
+    arr[0].t=now(); state.sets[ex.code]=arr; closeSheet(); afterLog(); render();
   }
 
   function closeSheet(){ $("#overlay").classList.remove("open"); current=null; }
@@ -377,12 +456,15 @@ const WORKOUT = {
     const L=[];
     L.push("#"+WORKOUT.id+" · "+WORKOUT.date+" · "+WORKOUT.title+" · "+WORKOUT.subtitle);
     L.push("");
+    const _st=startTs(), _fin=finishTs();
+    if(_st){ let t="Старт "+fmtClock(_st); if(_fin && _fin>_st) t+=" · Финиш "+fmtClock(_fin)+" · "+Math.round((_fin-_st)/60000)+" мин"; L.push(t); L.push(""); }
+    const off = ex => (_st && exFirstT(ex)!=null) ? " ["+fmtMMSS((exFirstT(ex)-_st)/1000)+"]" : "";
     flat.forEach(ex=>{
-      if(ex.bodyweight){ L.push(ex.logName+": "+(state.sets[ex.code]===true?"✓ "+ex.weight:"—")); return; }
+      if(ex.bodyweight){ L.push(ex.logName+off(ex)+": "+(state.sets[ex.code]?"✓ "+ex.weight:"—")); return; }
       const d = Array.isArray(state.sets[ex.code]) ? state.sets[ex.code] : [];
       if(ex.dropset){
         const drops=ex.drops||[];
-        L.push(ex.logName+": "+drops.map((dw,k)=>{ const s=d[k]||{}; const w=(s.w!==undefined&&s.w!=="")?s.w:dw; const r=(s.r!==undefined&&s.r!=="")?s.r:"_"; return w+"×"+r; }).join(" → "));
+        L.push(ex.logName+off(ex)+": "+drops.map((dw,k)=>{ const s=d[k]||{}; const w=(s.w!==undefined&&s.w!=="")?s.w:dw; const r=(s.r!==undefined&&s.r!=="")?s.r:"_"; return w+"×"+r; }).join(" → "));
         return;
       }
       const parts=[];
@@ -393,11 +475,10 @@ const WORKOUT = {
         const rpe=(s.rpe!==undefined&&s.rpe!=="")?" RPE"+s.rpe:"";
         parts.push("п"+(i+1)+" "+w+"×"+r+rpe);
       }
-      L.push(ex.code+" "+ex.logName+": "+parts.join("  "));
+      L.push(ex.code+" "+ex.logName+off(ex)+": "+parts.join("  "));
     });
     L.push("");
     const f=state.footer;
-    L.push("Время: "+(f.time||""));
     L.push("Памп: дельты "+(f.pump_delts||"_")+" / грудь "+(f.pump_chest||"_")+" / спина "+(f.pump_back||"_"));
     L.push("Ощущение: "+(f.feeling||""));
     L.push("Сон ночь / энергия: "+(f.sleep||""));
@@ -420,8 +501,9 @@ const WORKOUT = {
     }
   };
 
-  $("#reset").onclick=()=>{ if(confirm("Очистить все введённые данные этой тренировки?")){ state={sets:{},footer:{}}; save(); render(); toast("Сброшено"); } };
+  $("#reset").onclick=()=>{ if(confirm("Очистить все введённые данные этой тренировки?")){ state={sets:{},footer:{}}; save(); stopRest(); renderClock(); render(); toast("Сброшено"); } };
 
+  renderClock();
   render();
 })();
 </script>
