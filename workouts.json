@@ -9,7 +9,7 @@
   ],
   "workouts": [
     {
-      "id": "58", "day": "Вт", "date": "02.06", "title": "Day 1 Upper A", "subtitle": "Phase 3 V-Taper · горизонт + дельты",
+      "id": "58", "day": "Вт", "date": "02.06", "iso": "2026-06-02", "title": "Day 1 Upper A", "subtitle": "Phase 3 V-Taper · горизонт + дельты",
       "location": "Amersfoort",
       "groups": [
         { "name": "Суперсет 1", "hint": "грудь ↔ задняя дельта · чередуй 1A → 1B", "exercises": [
@@ -33,7 +33,7 @@
       ]
     },
     {
-      "id": "59", "day": "Пт", "date": "05.06", "title": "Day 2 Upper B", "subtitle": "Phase 3 V-Taper · вертикаль + руки",
+      "id": "59", "day": "Пт", "date": "05.06", "iso": "2026-06-05", "title": "Day 2 Upper B", "subtitle": "Phase 3 V-Taper · вертикаль + руки",
       "location": "Amersfoort",
       "groups": [
         { "name": "Суперсет 1", "hint": "широчайшая ↔ верх груди · 1A → 1B", "exercises": [
@@ -58,7 +58,7 @@
       ]
     },
     {
-      "id": "60", "day": "Вс", "date": "07.06", "title": "Day 3 Lower + Core", "subtitle": "Phase 3 V-Taper · ноги ~25% + кор",
+      "id": "60", "day": "Вс", "date": "07.06", "iso": "2026-06-07", "title": "Day 3 Lower + Core", "subtitle": "Phase 3 V-Taper · ноги ~25% + кор",
       "location": "Hilversum",
       "groups": [
         { "name": "Ноги", "exercises": [

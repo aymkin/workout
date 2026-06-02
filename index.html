@@ -26,14 +26,34 @@
   body{padding:0 0 96px; max-width:560px; margin:0 auto}
   header{position:sticky; top:0; z-index:5; background:linear-gradient(180deg,var(--bg) 80%,transparent);
     padding:10px 14px 8px}
-  /* selector */
-  .selector{display:flex; gap:8px; overflow-x:auto; padding:2px 0 8px; -webkit-overflow-scrolling:touch}
-  .chip{flex:0 0 auto; background:var(--card); border:1px solid var(--line); border-radius:12px;
-    padding:7px 12px; cursor:pointer; min-width:96px}
-  .chip.active{border-color:var(--accent); background:var(--card2)}
-  .chip .ct{font-size:14px; font-weight:700; display:flex; align-items:center; gap:5px}
-  .chip .cd{font-size:11px; color:var(--muted); margin-top:1px}
-  .chip .dot{font-size:12px}
+  /* header top row + calendar button */
+  .htop{display:flex; align-items:flex-start; justify-content:space-between; gap:10px}
+  .hinfo{min-width:0}
+  .calbtn{flex:0 0 auto; background:var(--card2); border:1px solid var(--line); border-radius:12px;
+    width:44px; height:40px; font-size:20px; line-height:1; cursor:pointer}
+  /* calendar modal */
+  .calmodal{align-items:center}
+  .calsheet{background:var(--card); width:calc(100% - 28px); max-width:380px; border-radius:18px;
+    padding:16px; border:1px solid var(--line); animation:up .2s ease}
+  .calhead{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px}
+  .caltitle{font-weight:700; font-size:16px}
+  .calnav{background:var(--card2); border:1px solid var(--line); color:var(--txt); border-radius:10px;
+    width:42px; height:36px; font-size:18px; cursor:pointer}
+  .calgrid{display:grid; grid-template-columns:repeat(7,1fr); gap:4px}
+  .cwd{text-align:center; font-size:11px; color:var(--muted); padding-bottom:2px}
+  .cday{aspect-ratio:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    border-radius:10px; font-size:14px; color:var(--txt); border:1px solid transparent}
+  .cday.empty{visibility:hidden}
+  .cday .cdw{font-size:9px; margin-top:1px; font-weight:700}
+  .cday[data-id]{cursor:pointer}
+  .cday.w-plan{background:var(--card2); border-color:var(--accent); color:var(--accent)}
+  .cday.w-done{background:rgba(106,210,154,.18); border-color:var(--done); color:var(--done)}
+  .cday.w-missed{background:rgba(224,87,74,.15); border-color:var(--danger); color:var(--danger)}
+  .cday.w-active{box-shadow:0 0 0 2px var(--accent)}
+  .cday.today{outline:2px solid var(--txt); outline-offset:-2px}
+  .callegend{display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:14px; font-size:11px; color:var(--muted)}
+  .callegend i{display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:5px; vertical-align:middle}
+  .callegend i.done{background:var(--done)} .callegend i.miss{background:var(--danger)} .callegend i.plan{background:var(--accent)}
   .title{font-size:19px; font-weight:700; letter-spacing:.2px}
   .sub{color:var(--muted); font-size:13px; margin-top:2px}
   .meta{color:var(--accent); font-size:13px; font-weight:600; margin-top:3px}
@@ -128,10 +148,14 @@
 <!-- Данные тренировок грузятся из workouts.json (см. boot() ниже) -->
 
 <header>
-  <div class="selector" id="selector"></div>
-  <div class="title" id="h-title"></div>
-  <div class="sub" id="h-sub"></div>
-  <div class="meta" id="h-meta"></div>
+  <div class="htop">
+    <div class="hinfo">
+      <div class="title" id="h-title"></div>
+      <div class="sub" id="h-sub"></div>
+      <div class="meta" id="h-meta"></div>
+    </div>
+    <button class="calbtn" id="calbtn" aria-label="Календарь">📅</button>
+  </div>
   <div class="clockbar">
     <button class="startbtn" id="startbtn">▶ Старт</button>
     <span class="elapsed idle" id="elapsed">не начата</span>
@@ -155,6 +179,23 @@
 </div>
 
 <div class="overlay" id="overlay"><div class="sheet" id="sheet"></div></div>
+
+<div class="overlay calmodal" id="caloverlay">
+  <div class="calsheet">
+    <div class="calhead">
+      <button class="calnav" id="calprev">‹</button>
+      <div class="caltitle" id="caltitle"></div>
+      <button class="calnav" id="calnext">›</button>
+    </div>
+    <div class="calgrid" id="calgrid"></div>
+    <div class="callegend">
+      <span><i class="done"></i>завершена</span>
+      <span><i class="miss"></i>пропущена</span>
+      <span><i class="plan"></i>план</span>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -196,19 +237,51 @@
   function finishTs(){ if(state.finishedAt) return state.finishedAt; const ts=allTimes(); return ts.length?Math.max.apply(null,ts):null; }
   function exFirstT(ex){ const v=state.sets[ex.code]; if(Array.isArray(v)){ const ts=v.filter(s=>s&&s.t).map(s=>s.t); return ts.length?Math.min.apply(null,ts):null; } return (v&&v.t)?v.t:null; }
 
-  // ---- селектор сессий ----
-  function renderSelector(){
-    const sel=$("#selector"); sel.innerHTML="";
-    WORKOUTS.forEach(w=>{
-      const st=statusOf(w.id);
-      const dot = st==="done"?'<span class="dot">✓</span>':(st==="progress"?'<span class="dot">◐</span>':'');
-      const c=document.createElement("div");
-      c.className="chip"+(w.id===W.id?" active":"");
-      c.innerHTML='<div class="ct">'+w.title.replace("Day ","D")+' '+dot+'</div><div class="cd">'+w.day+' '+w.date+'</div>';
-      c.onclick=()=>{ if(w.id!==W.id){ stopRest(); selectWorkout(w.id); renderAll(); } };
-      sel.appendChild(c);
+  // ---- календарь сессий ----
+  let calOpen=false, calY, calM;
+  const WD=["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
+  const MON=["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+  function isoOf(y,m,d){ return y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0"); }
+  function todayISO(){ const t=new Date(); return isoOf(t.getFullYear(),t.getMonth(),t.getDate()); }
+  function workoutByISO(iso){ return WORKOUTS.find(w=>w.iso===iso); }
+  // вызывается из логирования/часов — обновить календарь, только если он открыт
+  function renderSelector(){ if(calOpen) renderCalendar(); }
+  function openCal(){
+    let y, m;
+    if(W && W.iso){ const p=W.iso.split("-"); y=+p[0]; m=+p[1]-1; }
+    else { const t=new Date(); y=t.getFullYear(); m=t.getMonth(); }
+    calY=y; calM=m; calOpen=true; renderCalendar(); $("#caloverlay").classList.add("open");
+  }
+  function closeCal(){ calOpen=false; $("#caloverlay").classList.remove("open"); }
+  function renderCalendar(){
+    const tISO=todayISO();
+    $("#caltitle").textContent=MON[calM]+" "+calY;
+    let html=""; WD.forEach(d=> html+='<div class="cwd">'+d+'</div>');
+    const offset=(new Date(calY,calM,1).getDay()+6)%7;       // понедельник первый
+    const days=new Date(calY,calM+1,0).getDate();
+    for(let i=0;i<offset;i++) html+='<div class="cday empty"></div>';
+    for(let d=1;d<=days;d++){
+      const iso=isoOf(calY,calM,d); const w=workoutByISO(iso);
+      let cls="cday";
+      if(w){ const st=statusOf(w.id);
+        if(st==="done") cls+=" w-done";
+        else if(iso<tISO) cls+=" w-missed";
+        else cls+=" w-plan";
+        if(w.id===W.id) cls+=" w-active";
+      }
+      if(iso===tISO) cls+=" today";
+      html+='<div class="'+cls+'"'+(w?' data-id="'+w.id+'"':'')+'>'+d+(w?'<span class="cdw">'+w.title.replace("Day ","D")+'</span>':'')+'</div>';
+    }
+    $("#calgrid").innerHTML=html;
+    $("#calgrid").querySelectorAll(".cday[data-id]").forEach(el=> el.onclick=()=>{
+      const id=el.dataset.id; if(id!==W.id){ stopRest(); selectWorkout(id); }
+      closeCal(); renderHeader(); renderClock(); render();
     });
   }
+  $("#calbtn").onclick=()=>{ calOpen?closeCal():openCal(); };
+  $("#caloverlay").addEventListener("click",e=>{ if(e.target.id==="caloverlay") closeCal(); });
+  $("#calprev").onclick=()=>{ calM--; if(calM<0){calM=11;calY--;} renderCalendar(); };
+  $("#calnext").onclick=()=>{ calM++; if(calM>11){calM=0;calY++;} renderCalendar(); };
 
   // ---- шапка ----
   function renderHeader(){

@@ -1,6 +1,6 @@
 // Service worker: network-first для страницы и workouts.json (свежие данные онлайн),
 // cache-first для иконок/манифеста. Офлайн в зале — отдаём кэш.
-const CACHE = "workout-v5";
+const CACHE = "workout-v6";
 const ASSETS = [
   "./", "./index.html", "./workouts.json", "./manifest.webmanifest",
   "./icon-192.png", "./icon-512.png", "./icon-180.png"
