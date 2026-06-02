@@ -86,6 +86,7 @@
   .sheet .sub{color:var(--muted); font-size:13px; margin-bottom:14px}
   .setrow{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; align-items:center; margin:6px 0}
   .setrow.drop{grid-template-columns:48px 1fr}
+  .setrow.drop2{grid-template-columns:1fr 1fr}
   .setrow .lbl{color:var(--muted); font-size:13px; font-weight:700}
   .setrow input{width:100%; background:var(--bg); border:1px solid var(--line); color:var(--txt);
     border-radius:10px; padding:14px 6px; font-size:18px; text-align:center;
@@ -134,8 +135,8 @@ const WORKOUT = {
       ]},
     { name: "Финишер",
       exercises: [
-        { code:"F", name:"Lateral Raise drop-set", logName:"Finisher LR drop", weight:"по 8 → 6 → 4", reps:"до отказа", rpe:"9", sets:3, dropset:true,
-          cue:"три дропа подряд без пауз; пиши только вес" },
+        { code:"F", name:"Lateral Raise drop-set", logName:"Finisher LR drop", weight:"по 8 → 6 → 4", reps:"до отказа", rpe:"9", dropset:true, drops:[8,6,4],
+          cue:"три дропа подряд без пауз; впиши повторы на каждом весе" },
       ]},
     { name: "Кор",
       exercises: [
@@ -212,7 +213,7 @@ const WORKOUT = {
 
   function rowDone(ex,i){
     if(ex.bodyweight) return state.sets[ex.code]===true;
-    if(ex.dropset){ const a=state.sets[ex.code]; return Array.isArray(a) && a.some(s=> s && s.w!==undefined && s.w!==""); }
+    if(ex.dropset){ const a=state.sets[ex.code]; return Array.isArray(a) && a.some(s=> s && ((s.w!==undefined&&s.w!=="")||(s.r!==undefined&&s.r!==""))); }
     return filled(setEntry(ex.code,i));
   }
 
@@ -220,7 +221,8 @@ const WORKOUT = {
     if(ex.bodyweight) return state.sets[ex.code]===true ? "сделано ✓" : "";
     if(ex.dropset){
       const a=state.sets[ex.code]; if(!Array.isArray(a)) return "";
-      return [8,6,4].map((rp,k)=> rp+"("+(a[k]&&a[k].w!==undefined&&a[k].w!==""?a[k].w:"_")+")").join(" → ");
+      const drops=ex.drops||[];
+      return drops.map((dw,k)=>{ const s=a[k]||{}; const w=(s.w!==undefined&&s.w!=="")?s.w:dw; const r=(s.r!==undefined&&s.r!=="")?s.r:"_"; return w+"×"+r; }).join(" → ");
     }
     const s=setEntry(ex.code,i); if(!filled(s)) return "";
     return (s.w!==""&&s.w!==undefined?s.w:"_")+"×"+(s.r!==""&&s.r!==undefined?s.r:"_")
@@ -308,11 +310,15 @@ const WORKOUT = {
   function openDrop(ex){
     current={ex,mode:"drop"};
     const a = Array.isArray(state.sets[ex.code]) ? state.sets[ex.code] : [];
-    let rows="";
-    [8,6,4].forEach((rp,k)=>{
-      const v = a[k]&&a[k].w!==undefined ? a[k].w : "";
-      rows+='<div class="setrow drop"><div class="lbl">×'+rp+'</div>'
-        +'<input inputmode="decimal" data-k="'+k+'" value="'+v+'" placeholder="вес гантели"></div>';
+    const drops = ex.drops || [8,6,4];
+    let rows='<div class="heads"><span>вес (кг)</span><span>повторов</span></div>';
+    drops.forEach((dw,k)=>{
+      const s = a[k] || {};
+      const w = (s.w!==undefined && s.w!=="") ? s.w : dw;
+      const r = (s.r!==undefined) ? s.r : "";
+      rows+='<div class="setrow drop2">'
+        +'<input inputmode="decimal" data-k="'+k+'" data-f="w" value="'+w+'" placeholder="кг">'
+        +'<input inputmode="numeric" data-k="'+k+'" data-f="r" value="'+r+'" placeholder="повт"></div>';
     });
     $("#sheet").innerHTML =
       '<h2>'+ex.name+'</h2><div class="sub">'+ex.cue+'</div>'+rows
@@ -322,8 +328,9 @@ const WORKOUT = {
     $("#overlay").classList.add("open");
   }
   function saveDrop(){
-    const ex=current.ex; const arr=[{w:""},{w:""},{w:""}];
-    $("#sheet").querySelectorAll("input").forEach(inp=>{ arr[+inp.dataset.k]={w:inp.value.trim()}; });
+    const ex=current.ex; const drops=ex.drops||[8,6,4];
+    const arr=drops.map(()=>({w:"",r:""}));
+    $("#sheet").querySelectorAll("input").forEach(inp=>{ arr[+inp.dataset.k][inp.dataset.f]=inp.value.trim(); });
     state.sets[ex.code]=arr; save(); closeSheet(); render();
   }
 
@@ -374,7 +381,8 @@ const WORKOUT = {
       if(ex.bodyweight){ L.push(ex.logName+": "+(state.sets[ex.code]===true?"✓ "+ex.weight:"—")); return; }
       const d = Array.isArray(state.sets[ex.code]) ? state.sets[ex.code] : [];
       if(ex.dropset){
-        L.push(ex.logName+": "+[8,6,4].map((rp,k)=> rp+"("+(d[k]&&d[k].w!==undefined&&d[k].w!==""?d[k].w:"_")+")").join(" → "));
+        const drops=ex.drops||[];
+        L.push(ex.logName+": "+drops.map((dw,k)=>{ const s=d[k]||{}; const w=(s.w!==undefined&&s.w!=="")?s.w:dw; const r=(s.r!==undefined&&s.r!=="")?s.r:"_"; return w+"×"+r; }).join(" → "));
         return;
       }
       const parts=[];
