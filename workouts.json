@@ -72,7 +72,7 @@
           { "code": "3", "name": "Calf Raise", "logName": "Calf Raise", "weight": "калибровка", "reps": "12–15", "rpe": "8", "sets": 3, "isNew": true, "def": { "r": 13, "rpe": 8 }, "cue": "сфотать сетку" }
         ]},
         { "name": "Дельта (добор частоты 3×)", "exercises": [
-          { "code": "4", "name": "Seated DB Lateral Raise", "logName": "Lateral Raise (по)", "weight": "по 6", "reps": "15", "rpe": "8", "sets": 3, "def": { "w": 6, "r": 15, "rpe": 8 }, "cue": "3-й день частоты боковой дельты за неделю" }
+          { "code": "4", "name": "Seated DB Lateral Raise", "logName": "Lateral Raise (по)", "weight": "по 8", "reps": "12–15", "rpe": "8", "sets": 3, "def": { "w": 8, "r": 14, "rpe": 8 }, "cue": "8 кг (апгрейд #59: 8×14/12/11); 3-й день частоты дельты, добей 12-15" }
         ]},
         { "name": "Кор (стабилизация)", "exercises": [
           { "code": "C1", "name": "Pallof Press", "logName": "Pallof Press", "weight": "2 × 12 / сторону", "bodyweight": true },
