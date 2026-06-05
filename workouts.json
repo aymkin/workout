@@ -37,16 +37,16 @@
       "location": "Amersfoort",
       "groups": [
         { "name": "Суперсет 1", "hint": "широчайшая ↔ верх груди · 1A → 1B", "exercises": [
-          { "code": "1A", "name": "Pull-up / Gravitron", "logName": "Pull-up/Gravitron", "weight": "свой / ассист", "reps": "6–10", "rpe": "8–9", "sets": 3, "isNew": true, "def": { "r": 8, "rpe": 8 }, "cue": "вис декомпрессирует L4; ассист если строгих <8" },
-          { "code": "1B", "name": "Incline DB Press 30°", "logName": "Incline DB 30°", "weight": "~26", "reps": "10–12", "rpe": "8", "sets": 3, "def": { "w": 26, "r": 11, "rpe": 8 }, "cue": "чуть легче/больше повторов, чем в Day 1" }
+          { "code": "1A", "name": "Pull-up / Gravitron", "logName": "Pull-up/Gravitron", "weight": "свой / ассист", "reps": "6–10", "rpe": "8–9", "sets": 3, "isNew": true, "def": { "r": 8, "rpe": 8 }, "cue": "нейтральный хват (твой дефолт) или пронир. для ширины; вис декомпрессирует L4; ассист Gravitron если строгих <8" },
+          { "code": "1B", "name": "Incline DB Press 30°", "logName": "Incline DB 30°", "weight": "~22", "reps": "10–12", "rpe": "8", "sets": 3, "def": { "w": 22, "r": 11, "rpe": 8 }, "cue": "22 (не 26): во Вт 26 дал лишь 5-6 повт RPE9; здесь цель 10-12 RPE8" }
         ]},
         { "name": "Суперсет 2", "hint": "широчайшая стрейч ↔ средняя дельта · 2A → 2B (+4-й соло)", "exercises": [
           { "code": "2A", "name": "Straight-Arm Pulldown", "logName": "Straight-Arm Pulldown", "weight": "калибровка", "reps": "12–15", "rpe": "8", "sets": 3, "isNew": true, "def": { "r": 13, "rpe": 8 }, "cue": "руки прямые, изолируй широчайшую; сфотать сетку" },
           { "code": "2B", "name": "Seated DB Lateral Raise", "logName": "Lateral Raise (по)", "weight": "по 6", "reps": "12–15", "rpe": "8", "sets": 4, "def": { "w": 6, "r": 13, "rpe": 8 }, "cue": "6 кг; главный драйвер V — гнать к 12-15" }
         ]},
         { "name": "Руки (суперсет)", "hint": "бицепс ↔ трицепс · 3A → 3B", "exercises": [
-          { "code": "3A", "name": "DB Biceps Curl", "logName": "Biceps Curl (по)", "weight": "по 14", "reps": "10–12", "rpe": "9", "sets": 3, "def": { "w": 14, "r": 11, "rpe": 9 } },
-          { "code": "3B", "name": "Cable Triceps Push-down", "logName": "Triceps Push-down", "weight": "~32", "reps": "10–12", "rpe": "9", "sets": 3, "def": { "w": 32, "r": 11, "rpe": 9 } }
+          { "code": "3A", "name": "DB Biceps Curl", "logName": "Biceps Curl (по)", "weight": "по 12", "reps": "10–12", "rpe": "9", "sets": 3, "def": { "w": 12, "r": 11, "rpe": 9 }, "cue": "ориентир — штанга 25; начни 12/рука, добей 10-12 RPE9" },
+          { "code": "3B", "name": "Cable Triceps Push-down", "logName": "Triceps Push-down", "weight": "~27", "reps": "10–12", "rpe": "9", "sets": 3, "def": { "w": 27, "r": 11, "rpe": 9 }, "cue": "привычные 27; если 12 идут RPE<9 — к 32" }
         ]},
         { "name": "Финишер", "exercises": [
           { "code": "F", "name": "Lateral Raise myo-reps", "logName": "Finisher LR myo", "weight": "по 6", "reps": "актив + мини", "rpe": "9", "sets": 1, "def": { "w": 6, "r": 15, "rpe": 9 }, "cue": "1 актив-сет до RPE9, затем мини-сеты 3-5 повт с паузой 10-15с; впиши общий итог" }
