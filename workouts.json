@@ -62,11 +62,11 @@
       "location": "Hilversum",
       "groups": [
         { "name": "Ноги", "exercises": [
-          { "code": "1", "name": "Leg Press", "logName": "Leg Press", "weight": "~141", "reps": "8–12", "rpe": "8–9", "sets": 3, "def": { "w": 141, "r": 9, "rpe": 9 }, "cue": "L4-safe; без осевой компрессии" }
+          { "code": "1", "name": "Leg Press", "logName": "Leg Press", "weight": "113 (→120)", "reps": "8–12", "rpe": "8–9", "sets": 3, "def": { "w": 113, "r": 10, "rpe": 8 }, "cue": "Hilversum-машина, НЕ Amersfoort 141; старт 113 (верифиц. #54), →120 если RPE<8" }
         ]},
-        { "name": "Квадрицепс ↔ бицепс бедра (суперсет)", "hint": "2A → 2B", "exercises": [
-          { "code": "2A", "name": "Leg Extension", "logName": "Leg Extension", "weight": "~86", "reps": "12–15", "rpe": "8", "sets": 2, "def": { "w": 86, "r": 13, "rpe": 8 }, "cue": "апгрейд 79→86 (заработан #55)" },
-          { "code": "2B", "name": "Leg Curl", "logName": "Leg Curl", "weight": "~61", "reps": "12–15", "rpe": "8", "sets": 2, "def": { "w": 61, "r": 13, "rpe": 8 }, "cue": "если тренажёр сломан — Hip Thrust" }
+        { "name": "Квадрицепс ↔ задняя цепь (суперсет)", "hint": "2A → 2B", "exercises": [
+          { "code": "2A", "name": "Leg Extension", "logName": "Leg Extension", "weight": "~66", "reps": "12–15", "rpe": "8", "sets": 2, "def": { "w": 66, "r": 13, "rpe": 8 }, "cue": "Hilversum-сетка, НЕ Amersfoort 86; удержание 66 (самоапгрейд #54)" },
+          { "code": "2B", "name": "Hip Thrust", "logName": "Hip Thrust", "weight": "~54", "reps": "12–15", "rpe": "8", "sets": 2, "def": { "w": 54, "r": 13, "rpe": 8 }, "cue": "Leg Curl в Hilversum сломан → Hip Thrust 54 (самоапгрейд #54; сетка шаг 9)" }
         ]},
         { "name": "Икры", "exercises": [
           { "code": "3", "name": "Calf Raise", "logName": "Calf Raise", "weight": "калибровка", "reps": "12–15", "rpe": "8", "sets": 3, "isNew": true, "def": { "r": 13, "rpe": 8 }, "cue": "сфотать сетку" }
